@@ -1,0 +1,60 @@
+name: Pubblica X-Pass per iPhone
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Scarica i file del repository
+        uses: actions/checkout@v4
+
+      - name: Controllo sicurezza (nessun file riservato)
+        run: |
+          BAD=$(git ls-files | grep -i -E '(keystore|\.jks$|\.p12$|\.pem$|\.key$|\.vault$|\.csv$|apk\.yml$)' || true)
+          if [ -n "$BAD" ]; then
+            echo "ERRORE: nel repository pubblico ci sono file che non devono esserci:"
+            echo "$BAD"
+            echo "Eliminali dal repository (e, se e' la chiave Android, considerala ormai pubblica)."
+            exit 1
+          fi
+          echo "Nessun file riservato trovato"
+
+      - name: Prepara il sito (solo i file dell'app)
+        run: |
+          mkdir sito
+          cp index.html sw.js manifest.json icon-180.png icon-192.png icon-512.png sito/
+          B="${{ github.run_number }}"
+          sed -i "s/const BUILD=\"\"/const BUILD=\"$B\"/" sito/index.html
+          grep -q "const BUILD=\"$B\"" sito/index.html || { echo "BUILD non impostato"; exit 1; }
+          sed -i "s/__BUILD__/$B-${GITHUB_SHA::7}/" sito/sw.js
+          grep -q "\"$B-" sito/sw.js || { echo "Versione service worker non impostata"; exit 1; }
+          touch sito/.nojekyll
+          ls -la sito
+
+      - name: Configura GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Carica il sito
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: sito
+
+      - name: Pubblica
+        id: deployment
+        uses: actions/deploy-pages@v4

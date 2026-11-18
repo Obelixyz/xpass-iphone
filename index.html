@@ -45,15 +45,26 @@ label{display:block;font-size:13px;color:var(--mut);margin:0 0 5px}
 .menu{max-height:calc(100vh - 90px);overflow-y:auto}
 .dup{font-size:13px;margin-top:4px;color:#f08a24}.risk{color:var(--bad)}
 .ov{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+/* Finestre: titolo a sinistra e ✕ per chiudere in alto a destra. Pagine: freccia ← in alto a sinistra */
+.mt{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.mt>b,.mt>p{flex:1;margin:0;padding-top:8px;font-size:16px}.mt>b{font-size:17px}
+.x{flex:none;width:40px;height:40px;padding:0;border-radius:50%;font-size:18px;line-height:1;margin:-4px -4px 0 0}
+.list button{display:flex;gap:14px;align-items:center;width:100%;text-align:left;padding:15px 16px;margin-bottom:10px;border-radius:16px;font-size:16px}.list .li{font-size:24px;flex:none;width:30px;text-align:center}.list small{display:block;color:var(--mut);font-size:13px;margin-top:3px}
+.sub{text-align:center;color:var(--mut);font-size:14px;margin:-6px 0 14px}
+.seg2{display:inline-grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}.seg2 button{padding:6px 16px;font-size:14px}
+.lbl{width:auto;max-width:100%;background:transparent;border:0;border-bottom:1px dashed var(--mut);border-radius:0;padding:2px 2px 3px;font-size:13px;color:var(--mut);margin-bottom:6px}.lbl:focus{outline:none;border-bottom:1px solid var(--ac);color:var(--tx)}
+.val{word-break:break-word;white-space:pre-wrap}
+/* "Aggiungi un campo": due pulsanti sempre larghi e alti uguali, testo su una riga se c'è posto */
+.row.add{align-items:stretch}.row.add button{flex:1 1 0;min-width:0;padding:11px 3px;white-space:nowrap;font-size:.875em}
 /* iPhone: velo scuro sotto la barra di stato (ora, batteria) così resta leggibile anche con i temi chiari */
 .lt body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:#0007;z-index:45;pointer-events:none}
-/* Schermata neutra quando l'app va in secondo piano (anteprima nelle app recenti) */
-#cover{position:fixed;inset:0;z-index:200;background:var(--bg);display:none;align-items:center;justify-content:center}#cover img{width:96px;height:96px;border-radius:22%}.hid #cover{display:flex}
+/* Copertura (solo app web): nasconde le voci quando X-Pass non è in primo piano, così l'anteprima nelle app recenti
+   non mostra i dati. È sempre presente nella pagina e si accende cambiando una sola classe: è il modo più rapido */
+#cover{position:fixed;inset:0;z-index:300;background:#1e3d2f;display:flex;align-items:center;justify-content:center;visibility:hidden}#cover img{width:96px;height:96px;border-radius:22%}.hid #cover{visibility:visible}.hid #app,.hid .ov,.hid #toast{visibility:hidden}
 .inst{text-align:left;max-width:420px;margin:6vh auto 0}.inst h1{text-align:center;font-size:30px;margin:10px 0 6px}.inst ol{padding-left:22px;line-height:1.5}.inst li{margin:10px 0}.inst .k{display:inline-block;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:1px 7px;white-space:nowrap}.inst .lg{display:block;width:84px;height:84px;border-radius:22%;margin:0 auto}
 a{color:var(--ac)}
 </style></head><body><div id="cover"><img src="icon-180.png" alt=""></div><div class="w" id="app"></div>
 <script>
-const VER="1.8";const BUILD="";
+const VER="2.0";const BUILD="";
 let arH=0,arW=0;function setAR(){if(innerWidth!=arW){arW=innerWidth;arH=0}arH=Math.max(arH,innerHeight);document.documentElement.style.setProperty("--ar",arW+"/"+arH);document.documentElement.style.setProperty("--vh",arH+"px")}setAR();addEventListener("resize",setAR);
 const FP='<svg viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="vertical-align:-.22em"><path d="M5.5 8.5A7.5 7.5 0 0 1 19 9"/><path d="M4 12.5c.2-1 .5-2 1-2.8"/><path d="M8 20.5c-1-1.6-1.6-3.6-1.6-5.5 0-3 2.5-5.5 5.6-5.5s5.6 2.5 5.6 5.5"/><path d="M12 13v2c0 2.6 1 4.8 2.6 6.2"/><path d="M9.3 15c0 2.4.7 4.4 2 6"/><path d="M14.8 15.5c.1 1.4.5 2.6 1.1 3.6"/><path d="M17.6 17.5c.3-.8.4-1.6.4-2.5"/><path d="M8 4.2A8 8 0 0 1 16.5 4"/></svg>';
 const ICONS="🔑 🏦 💳 📧 🛒 🎮 📱 💻 ☁️ 🌐 🏠 🚗 ✈️ 🏥 🎓 💼 📺 🎵 📷 🔒 🛡️ ⚙️ 📶 🧾 ⭐ ❤️ 🏢 📦 🛠️ 👤 🔔 📁 🏧 💰 📊 🗂️ 📝 📞 ✉️ 🔐 🗝️ 🧳 🏪 🍽️ ☕ 🛍️ 🎬 🎧 📚 🏋️ 🩺 💊 🐶 ⚽ 🎲 🕹️ 🛰️ 🌍 🧠 🔧 📡 🖥️ ⌨️ 🖨️ 🏛️ 🚌 🚆 🛵 ⛽ 🔌 💡 👨‍👩‍👧 🎁 ☂️ 🌙 ☀️ 🔥 🚀 🏖️ 🎯 🧩 🔖".split(" ");
@@ -69,24 +80,24 @@ async function seal(obj,key,salt){const iv=crypto.getRandomValues(new Uint8Array
 async function open(d,key){return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb(d.iv)},key,unb(d.c))))}
 /* Piattaforma: app Android (Capacitor), iPhone/iPad, app aperta dall'icona della schermata Home */
 const NATIVE=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
-const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform=="MacIntel"&&navigator.maxTouchPoints>1);
+const IOS=!NATIVE&&(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform=="MacIntel"&&navigator.maxTouchPoints>1));
 const STANDALONE=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
 const BIOL=IOS?"Face ID / Touch ID":"impronta / volto";
-/* Archivio dei dati: database IndexedDB del telefono (molto più spazio di localStorage, che su iPhone ha pochi MB).
-   Tutto viene caricato in memoria all'avvio: le letture sono immediate, le scritture vengono confermate dal database.
-   Se IndexedDB non è disponibile si usa localStorage. */
+/* Archivio dei dati. App web (iPhone): database IndexedDB del telefono, molto più capiente di localStorage (che su iPhone
+   ha pochi MB); tutto viene caricato in memoria all'avvio, così le letture sono immediate. App Android: localStorage come sempre.
+   Il database "xpass" è lo stesso della versione 1.8 per iPhone: chi aggiorna ritrova i suoi dati. */
 const ST={m:new Map(),db:null};
-function stInit(){return new Promise(res=>{let r;try{r=indexedDB.open("xpass",1)}catch(e){return res()}r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onerror=()=>res();r.onblocked=()=>res();
+function stInit(){return new Promise(res=>{if(NATIVE)return res();let r;try{r=indexedDB.open("xpass",1)}catch(e){return res()}r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onerror=()=>res();r.onblocked=()=>res();
 r.onsuccess=()=>{const db=r.result;try{const q=db.transaction("kv").objectStore("kv").openCursor();q.onsuccess=()=>{const c=q.result;if(c){ST.m.set(c.key,c.value);c.continue()}else{ST.db=db;stMigrate().then(res,res)}};q.onerror=()=>res()}catch(e){res()}}})}
-/* Dati salvati da versioni precedenti in localStorage: copiati una volta sola nel database */
-async function stMigrate(){if(ST.m.size)return;try{const K=["vault1","xlock1","xth1","xlci","xlck","bio1","bioask"];for(const k of K){const v=localStorage.getItem(k);if(v!=null)await stSet(k,v)}if(stGet("vault1")!=null)K.forEach(k=>localStorage.removeItem(k))}catch(e){}}
+/* Dati salvati in localStorage (app web aperta prima del database): copiati una volta sola nel database */
+async function stMigrate(){if(ST.m.size)return;try{const K=["vault1","xlock1","xth1","xlci","xlck","bio1","bioask","bkdir"];for(const k of K){const v=localStorage.getItem(k);if(v!=null)await stSet(k,v)}if(stGet("vault1")!=null)K.forEach(k=>localStorage.removeItem(k))}catch(e){}}
 const stGet=k=>ST.db?(ST.m.has(k)?ST.m.get(k):null):localStorage.getItem(k);
 function stSet(k,v){if(!ST.db){try{localStorage.setItem(k,v);return Promise.resolve()}catch(e){return Promise.reject(e)}}const had=ST.m.has(k),old=ST.m.get(k);ST.m.set(k,v);return new Promise((ok,ko)=>{const fail=e=>{if(had)ST.m.set(k,old);else ST.m.delete(k);ko(e||new Error("Scrittura non riuscita"))};try{const t=ST.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>ok();t.onabort=()=>fail(t.error);t.onerror=e=>e.preventDefault()}catch(e){fail(e)}})}
 function stDel(k){if(!ST.db){localStorage.removeItem(k);return Promise.resolve()}ST.m.delete(k);return new Promise(ok=>{try{const t=ST.db.transaction("kv","readwrite");t.objectStore("kv").delete(k);t.oncomplete=t.onabort=()=>ok()}catch(e){ok()}})}
 function lsJ(k){try{return JSON.parse(stGet(k))}catch(e){return null}}
 let LIM=null,LK={imgs:[],fix:null,mode:"fix"};
 function loadLK(){LK=lsJ("xlock1")||{imgs:[],car:false,fix:null};if(!LK.mode)LK.mode=LK.car?"acc":"fix";delete LK.car}
-async function saveLK(){try{await stSet("xlock1",JSON.stringify(LK));return true}catch(e){say("Spazio pieno: elimina qualche immagine della pagina iniziale.");return false}}
+async function saveLK(){try{await stSet("xlock1",JSON.stringify(LK));return true}catch(e){say("Spazio pieno: elimina qualche immagine della schermata di sblocco (⚙️ › Personalizza).");return false}}
 /* Immagine della pagina iniziale: fissa (📌), oppure cambia a ogni accesso, ogni giorno o ogni mese */
 function lockPick(){const a=LK.imgs||[];if(!a.length)return null;const m=LK.mode,st=(k,v)=>{stSet(k,String(v)).catch(()=>{})};
 if(m=="fix")return(a.find(x=>x.id==LK.fix)||a[0]).u;let i=+stGet("xlci")||0;
@@ -94,19 +105,29 @@ if(m=="acc"){i%=a.length;st("xlci",(i+1)%a.length);return a[i].u}
 const d=new Date(),k=d.getFullYear()+"-"+(d.getMonth()+1)+(m=="day"?"-"+d.getDate():""),pk=stGet("xlck");
 if(pk!==k){if(pk!==null)i++;i%=a.length;st("xlci",i);st("xlck",k)}return a[i%a.length].u}
 function lsGet(){try{return JSON.parse(stGet("vault1"))}catch(e){return null}}
-const dlg=(h,f)=>new Promise(r=>{const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><p style="margin:0 0 14px">${h}</p><div class="row2">${f}</div></div>`;document.body.appendChild(o);o.onclick=e=>{const b=e.target.closest("button");if(b){o.remove();r(b.dataset.v=="1")}}});
+/* ✕ di chiusura: vale come "Annulla" in tutte le finestre */
+const XB='<button class="x" data-v="0" data-a="close" title="Chiudi" aria-label="Chiudi">✕</button>',hd=t=>`<div class="mt"><b>${t}</b>${XB}</div>`;
+const dlg=(h,f)=>new Promise(r=>{const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><div class="mt"><p>${h}</p>${XB}</div><div class="row2">${f}</div></div>`;document.body.appendChild(o);o.onclick=e=>{const b=e.target.closest("button");if(b){o.remove();r(b.dataset.v=="1")}}});
 const ask=m=>dlg(esc(m),'<button data-v="0">Annulla</button><button class="p" data-v="1">Conferma</button>');
 const say=m=>dlg(esc(m),'<button class="p" data-v="1">OK</button>');
-async function persist(){trackDirty();try{await stSet("vault1",JSON.stringify(await seal(V,KEY,SALT)));const t=V.theme;await stSet("xth1",JSON.stringify(t?{bg:t.bg,card:t.card,tx:t.tx,ac:t.ac}:null))}catch(e){e=e||{};say(/quota/i.test(e.name+e.message)?"Spazio pieno: elimina qualche immagine dalla libreria (Personalizza).":"Salvataggio NON riuscito: "+e.name+" "+e.message)}}
+async function persist(){trackDirty();try{await stSet("vault1",JSON.stringify(await seal(V,KEY,SALT)));const t=V.theme;await stSet("xth1",JSON.stringify(t?{bg:t.bg,card:t.card,tx:t.tx,ac:t.ac}:null))}catch(e){e=e||{};say(/quota/i.test(e.name+e.message)?"Spazio pieno: elimina qualche immagine di sfondo (⚙️ › Personalizza).":"Salvataggio NON riuscito: "+e.name+" "+e.message)}}
 function lock(){document.querySelectorAll(".ov,#mn").forEach(x=>x.remove());V=KEY=MP=null;cur=null;Q="";view={v:"lock"};if(UPD)return location.reload();applyTheme();render()}
 function bump(){clearTimeout(idle);if(KEY)idle=setTimeout(lock,5*60000)}
 ["click","keydown","touchstart"].forEach(e=>addEventListener(e,bump));
 /* Blocco quando l'app viene chiusa o messa in secondo piano (tranne mentre si sceglie un file, si salva o si usa Face ID).
    busy si spegne da solo quando l'operazione finisce (back) o, per sicurezza, dopo 10 minuti */
 let busy=false,busyT=null,hidAt=0;const away=()=>{busy=true;clearTimeout(busyT);busyT=setTimeout(()=>busy=false,600000)},back=()=>{busy=false;clearTimeout(busyT)};
-const hide=on=>document.documentElement.classList.toggle("hid",on);
-document.addEventListener("visibilitychange",()=>{if(document.hidden){hidAt=Date.now();if(KEY)hide(true);if(KEY&&!busy)lock()}else{hide(false);if(KEY&&busy&&Date.now()-hidAt>120000)lock();back();swCheck()}});
-addEventListener("pagehide",()=>{if(KEY&&!busy)lock()});
+/* App web: iPhone fotografa lo schermo per l'elenco delle app recenti nel momento in cui X-Pass smette di essere attiva
+   (scorrimento dal basso, Centro di Controllo, notifiche), PRIMA che la pagina risulti nascosta. Per questo la copertura
+   si accende già alla perdita del "focus" (blur) e non solo quando la pagina viene nascosta. Si spegne al ritorno. */
+const hide=on=>{if(!NATIVE)document.documentElement.classList.toggle("hid",on)};
+document.addEventListener("visibilitychange",()=>{if(document.hidden){hidAt=Date.now();if(KEY)hide(true);if(KEY&&!busy)lock()}else{if(KEY&&busy&&Date.now()-hidAt>120000)lock();back();hide(false);swCheck()}});
+addEventListener("pagehide",()=>{if(KEY)hide(true);if(KEY&&!busy)lock()});
+addEventListener("blur",e=>{if(e.target===window&&IOS&&KEY&&!busy)hide(true)});
+addEventListener("focus",e=>{if(e.target===window&&!document.hidden)hide(false)});
+addEventListener("pageshow",()=>{if(!document.hidden)hide(false)});
+/* sicurezza: se la copertura restasse accesa per errore, basta toccare lo schermo */
+["touchstart","mousedown","keydown"].forEach(t=>addEventListener(t,()=>{if(document.documentElement.classList.contains("hid")&&!document.hidden)hide(false)},true));
 const PL={};const plug=n=>{try{const C=window.Capacitor;if(!C||typeof C.nativePromise!="function"||!(C.isNativePlatform&&C.isNativePlatform()))return null;const H=C.PluginHeaders;if(Array.isArray(H)&&!H.some(h=>h.name==n))return null;return PL[n]||(PL[n]=new Proxy({},{get:(_,m)=>typeof m=="string"&&m!="then"?(o=>C.nativePromise(n,m,o||{})):undefined}))}catch(e){return null}};
 
 /* Icone e tema */
@@ -114,21 +135,21 @@ const ic=i=>{if(i&&i.startsWith("img:")){const u=(V.icons||{})[i.slice(4)];retur
 const lum=h=>{const n=parseInt(h.slice(1),16);return(.299*(n>>16)+.587*((n>>8)&255)+.114*(n&255))/255};
 const DEF={bg:"#1e3d2f",card:"#2b5841",tx:"#eaf5ee",ac:"#7bd88f"};
 function applyTheme(){const t=(V?V.theme:lsJ("xth1"))||DEF,r=document.documentElement.style,b=document.body.style;["--bg","--card","--tx","--ac","--on","--mut","--bd"].forEach(k=>r.removeProperty(k));let bl=document.getElementById("bgl");if(!bl){bl=document.createElement("div");bl.id="bgl";document.body.prepend(bl)}bl.style.backgroundImage="";r.colorScheme="";
-if(t&&t.bg){r.setProperty("--bg",t.bg);r.setProperty("--card",t.card);r.setProperty("--tx",t.tx);r.setProperty("--ac",t.ac);r.setProperty("--on",lum(t.ac)>.62?"#000":"#fff");r.setProperty("--mut","color-mix(in srgb,var(--tx) 60%,var(--card))");r.setProperty("--bd","color-mix(in srgb,var(--tx) 18%,var(--card))");r.colorScheme=lum(t.bg)<.45?"dark":"light"}document.documentElement.classList.toggle("lt",!!(t&&t.bg&&lum(t.bg)>=.45));
+if(t&&t.bg){r.setProperty("--bg",t.bg);r.setProperty("--card",t.card);r.setProperty("--tx",t.tx);r.setProperty("--ac",t.ac);r.setProperty("--on",lum(t.ac)>.62?"#000":"#fff");r.setProperty("--mut","color-mix(in srgb,var(--tx) 60%,var(--card))");r.setProperty("--bd","color-mix(in srgb,var(--tx) 18%,var(--card))");r.colorScheme=lum(t.bg)<.45?"dark":"light"}
 const L=id=>{const f=(V.lib||[]).find(x=>x.id==id);return f&&f.u};const im=V?(t&&L(t.imgId)):LIM;/* Immagine intera, mai ingrandita oltre lo schermo né tagliata; il livello ha altezza fissa, così non si rimpicciolisce quando si apre la tastiera */
-if(im)bl.style.backgroundImage=`url(${im})`}
+if(im)bl.style.backgroundImage=`url(${im})`;document.documentElement.classList.toggle("lt",!!(t&&t.bg&&lum(t.bg)>=.45))}
 function cc(){const s=getComputedStyle(document.documentElement),g=v=>s.getPropertyValue(v).trim();return{bg:g("--bg"),card:g("--card"),tx:g("--tx"),ac:g("--ac")}}
 function th(){return V.theme||(V.theme=cc())}
 function h2hsl(h){const n=parseInt(h.slice(1),16),r=(n>>16)/255,g=((n>>8)&255)/255,b=(n&255)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;let s=0,hh=0;if(d){s=d/(1-Math.abs(2*l-1));hh=mx==r?((g-b)/d+6)%6:mx==g?(b-r)/d+2:(r-g)/d+4;hh*=60}return[Math.round(hh),Math.round(s*100),Math.round(l*100)]}
 function hsl2h(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return"#"+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,"0")).join("")}
 function colorModal(k,name){const had=!!V.theme,t=th(),old=t[k];let[H,S,L]=h2hsl(old);const o=document.createElement("div");o.className="ov";
-o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><b>${name}</b><div id="cp" style="height:56px;border-radius:12px;margin:10px 0;border:1px solid var(--bd);background:${old}"></div><label>Tonalità</label><input type="range" id="ch" min="0" max="360" style="padding:0;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)"><label>Intensità</label><input type="range" id="cs" min="0" max="100" style="padding:0"><label>Luminosità</label><input type="range" id="cl" min="0" max="100" style="padding:0"><div class="pick">${SW.map(c=>`<button data-sw="${c}" style="background:${c};width:34px;height:34px;padding:0"></button>`).join("")}</div><div class="row2"><button id="cx">✕ Annulla</button><button class="p" id="cok">✔ Conferma</button></div></div>`;
+o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0">${hd("Colore: "+name)}<div id="cp" style="height:56px;border-radius:12px;margin:10px 0;border:1px solid var(--bd);background:${old}"></div><label>Tonalità</label><input type="range" id="ch" min="0" max="360" style="padding:0;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)"><label>Intensità</label><input type="range" id="cs" min="0" max="100" style="padding:0"><label>Luminosità</label><input type="range" id="cl" min="0" max="100" style="padding:0"><div class="pick">${SW.map(c=>`<button data-sw="${c}" style="background:${c};width:34px;height:34px;padding:0"></button>`).join("")}</div><div class="row2"><button id="cx">✕ Annulla</button><button class="p" id="cok">✔ Conferma</button></div></div>`;
 document.body.appendChild(o);const g=q=>o.querySelector(q),ch=g("#ch"),cs=g("#cs"),cl=g("#cl");
 const set=()=>{ch.value=H;cs.value=S;cl.value=L},upd=()=>{const c=hsl2h(H,S,L);t[k]=c;applyTheme();g("#cp").style.background=c};set();
 o.oninput=e=>{if(e.target.type=="range"){H=+ch.value;S=+cs.value;L=+cl.value;upd()}};
 o.onclick=e=>{const sw=e.target.closest("[data-sw]");if(sw){[H,S,L]=h2hsl(sw.dataset.sw);set();upd();return}
 if(e.target.closest("#cok")){persist();o.remove();render();return}
-if(e.target==o||e.target.closest("#cx")){if(had)t[k]=old;else V.theme=null;applyTheme();o.remove()}}}
+if(e.target==o||e.target.closest("#cx,.x")){if(had)t[k]=old;else V.theme=null;applyTheme();o.remove()}}}
 function migrate(){V.lib=V.lib||[];const t=V.theme;if(!t)return;const add=u=>{let f=V.lib.find(x=>x.u==u);if(!f){f={id:uid(),u};V.lib.push(f)}return f.id};if(t.img){t.imgId=add(t.img);delete t.img}delete t.car;delete t.carOn;delete t.ci}
 function loadOne(f,max,type,q){return new Promise(r=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(im.src);r(c.toDataURL(type,q||.75))};im.onerror=()=>r(null);im.src=URL.createObjectURL(f)})}
 function pickImg(cb,max,type,q,multi){const i=document.createElement("input");i.type="file";i.accept="image/*";i.multiple=!!multi;i.oncancel=back;i.onchange=async()=>{back();const out=[];for(const f of i.files){const u=await loadOne(f,max,type,q);if(u)out.push(u)}if(out.length)cb(multi?out:out[0])};away();i.click()}
@@ -144,73 +165,108 @@ function meter(p){const r=strength(p);return`<div class="meter"><i style="width:
 /* Password ripetute: tutte le password (principale e campi password) di tutti i record, escluso quello aperto */
 function pwList(e){return[e.password,...e.fields.filter(f=>f.type=="pw").map(f=>f.value)].filter(Boolean)}
 function usedBy(p){return V?V.entries.filter(e=>(!cur||e.id!=cur.id)&&pwList(e).includes(p)):[]}
-function dupNote(p){if(!p||!V)return"";const u=usedBy(p);if(MP&&p===MP&&!u.length)return'<div class="dup risk">⚠️ È uguale alla password principale di X-Pass</div>';if(!u.length)return"";const n=u.slice(0,3).map(e=>e.name).join(", ")+(u.length>3?" e altri "+(u.length-3):"");return`<div class="dup">⚠️ Usata anche in: ${esc(n)}</div>`}
-function pwCheck(){const weak=[],rep=new Map();for(const e of V.entries)for(const p of pwList(e)){if(strength(p).s<=30&&!weak.includes(e))weak.push(e);if(!rep.has(p))rep.set(p,[]);if(!rep.get(p).includes(e))rep.get(p).push(e)}
+function dupNote(p){if(!p||!V)return"";const u=usedBy(p);if(MP&&p===MP&&!u.length)return'<div class="dup risk">⚠️ È uguale alla password principale di X-Pass</div>';if(!u.length)return"";const n=u.slice().sort((x,y)=>az(x.name,y.name)).slice(0,3).map(e=>e.name).join(", ")+(u.length>3?" e altri "+(u.length-3):"");return`<div class="dup">⚠️ Usata anche in: ${esc(n)}</div>`}
+function pwCheck(){const weak=[],rep=new Map();for(const e of V.entries){const pins=[e.pwl=="PIN"?e.password:null,...e.fields.filter(f=>f.type=="pw"&&f.pwl=="PIN").map(f=>f.value)];for(const p of pwList(e)){if(!pins.includes(p)&&strength(p).s<=30&&!weak.includes(e))weak.push(e);if(!rep.has(p))rep.set(p,[]);if(!rep.get(p).includes(e))rep.get(p).push(e)}}
 const dup=[...rep.values()].filter(a=>a.length>1),same=V.entries.filter(e=>pwList(e).includes(MP));
-const li=a=>a.map(e=>`<button data-a="open" data-id="${e.id}" style="display:block;width:100%;text-align:left;margin-top:6px">${ic(e.icon)} ${esc(e.name)} <small class="note">· ${esc(e.group)}</small></button>`).join("");
-let h='<b>🩺 Controllo password</b>';if(!weak.length&&!dup.length&&!same.length)h+='<p>✅ Nessun problema: tutte le password sono diverse fra loro e abbastanza robuste.</p>';
+const li=a=>a.slice().sort((x,y)=>az(x.name,y.name)).map(e=>`<button data-a="open" data-id="${e.id}" style="display:block;width:100%;text-align:left;margin-top:6px">${ic(e.icon)} ${esc(e.name)} <small class="note">· ${esc(e.group)}</small></button>`).join("");
+let h='';if(!weak.length&&!dup.length&&!same.length)h+='<p style="margin:0">✅ Nessun problema: tutte le password sono diverse fra loro e abbastanza robuste.</p>';
 if(same.length)h+=`<p class="risk" style="margin:14px 0 0"><b>Uguali alla password principale (${same.length})</b><br><span class="note">Chi conosce quella password può aprire X-Pass: cambiala subito.</span></p>${li(same)}`;
 if(weak.length)h+=`<p style="margin:14px 0 0"><b>Deboli (${weak.length})</b><br><span class="note">Facili da indovinare: usa 🎲 Genera per crearne una robusta.</span></p>${li(weak)}`;
-if(dup.length)h+=`<p style="margin:14px 0 0"><b>Ripetute (${dup.length==1?"1 password usata":dup.length+" password usate"} in più record)</b><br><span class="note">Se un sito viene violato, sono a rischio anche gli altri account con la stessa password.</span></p>${dup.map(a=>`<div style="margin-top:8px;padding-left:10px;border-left:3px solid #f08a24">${li(a)}</div>`).join("")}`;
-modal(h+'<div class="row2" style="margin-top:16px"><button data-a="close">Chiudi</button></div>');const o=$(".ov .card");o.style.maxHeight="85vh";o.style.overflowY="auto"}
-function pwBlock(attr,val,ro){return`<div class="pw"><input type="password" ${attr} value="${esc(val)}" autocomplete="off" ${ro?"readonly":""}><div class="row2"><button data-a="eye">👁 Mostra</button><button data-a="copy">📋 Copia</button>${ro?"":'<button data-a="gtog">🎲 Genera</button>'}</div>
-${ro?"":`<div class="gen"><select class="gt"><option value="num">Numerica</option><option value="alnum" selected>Alfanumerica</option><option value="full">Alfanumerica + speciali</option></select><input type="range" class="gl" min="4" max="48" value="16" oninput="this.nextElementSibling.textContent=this.value"><span>16</span><button class="p" data-a="gen">Genera</button></div>`}<div class="m">${meter(val)}</div></div>`}
+if(dup.length)h+=`<p style="margin:14px 0 0"><b>Ripetute (${dup.length==1?"1 password usata":dup.length+" password usate"} in più voci)</b><br><span class="note">Se un sito viene violato, sono a rischio anche gli altri account con la stessa password.</span></p>${dup.map(a=>`<div style="margin-top:8px;padding-left:10px;border-left:3px solid #f08a24">${li(a)}</div>`).join("")}`;
+modal(h,"🩺 Controllo password");const o=$(".ov .card");o.style.maxHeight="85vh";o.style.overflowY="auto"}
+/* PIN: generatore solo numerico (4-12 cifre), tastiera numerica, nessuna barra di robustezza (un PIN è sempre "corto") */
+function pwBlock(attr,val,ro,pin){return`<div class="pw"${pin?' data-pin="1"':""}><input type="password" ${attr} value="${esc(val)}" autocomplete="off" ${pin?'inputmode="numeric"':""} ${ro?"readonly":""}><div class="row2"><button data-a="eye">👁 Mostra</button><button data-a="copy">📋 Copia</button>${ro?"":'<button data-a="gtog">🎲 Genera</button>'}</div>
+${ro?"":`<div class="gen">${pin?'<input type="hidden" class="gt" value="num"><span style="flex:1">Solo cifre · lunghezza</span>':'<select class="gt"><option value="num">Solo cifre</option><option value="alnum" selected>Lettere e cifre</option><option value="full">Lettere, cifre e simboli</option></select>'}<input type="range" class="gl" min="4" max="${pin?12:48}" value="${pin?5:16}" oninput="this.nextElementSibling.textContent=this.value"><span>${pin?5:16}</span><button class="p" data-a="gen">Genera</button></div>`}<div class="m">${pin?dupNote(val):meter(val)}</div></div>`}
 
 /* Viste */
 const bar=(l,t,r,c)=>`<div class="bar ${c||""}">${l||"<span></span>"}<h1>${t}</h1>${r||"<span></span>"}</div>`;
 const MB='<button data-a="menu" title="Impostazioni"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display:block;margin:auto"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54A.48.48 0 0 0 13.92 2h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.72 8.47a.48.48 0 0 0 .12.61l2.03 1.58c-.05.31-.07.63-.07.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.48.48 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></button>',BK='<button data-a="back">←</button>';
-function render(){bump();({lock:rLock,home:rHome,group:rGroup,entry:rEntry,theme:rTheme})[view.v]()}
+function render(){bump();({lock:rLock,home:rHome,group:rGroup,entry:rEntry,theme:rTheme,sec:rSec,bk:rBk})[view.v]()}
+/* Sottomenu del menu ⚙️: pagine con la freccia ← per tornare indietro */
+const LI=(a,i,t,s)=>`<button data-a="${a}"><span class="li">${i}</span><span>${t}${s?`<small>${s}</small>`:""}</span></button>`;
+function rSec(){app.innerHTML=`${bar(BK,"🛡️ Sicurezza")}<div class="list">
+${LI("chk","🩺","Controllo password","Trova le password deboli, ripetute o uguali alla password principale")}
+${LI("bio",FP,IOS?"Sblocco con Face ID / Touch ID":"Accesso biometrico",stGet("bio1")||stGet("pk1")?"✔ Attivo":"Non attivo")}
+${LI("chpw","🔑","Cambia password principale","La password che apre X-Pass")}</div>
+<p class="note">X-Pass si blocca da solo dopo 5 minuti di inattività o quando esci dall'app.${IOS?" Su iPhone non è possibile impedire gli screenshot: fai attenzione a non fotografare le password.":""}</p>`}
+function rBk(){const r=bkCfg();app.innerHTML=`${bar(BK,"💾 Backup e dati")}<p class="note" style="margin:0 0 14px">Il backup è un file cifrato con la tua password principale: contiene voci, gruppi e icone, non le immagini di sfondo. ${IOS?"Salvalo in iCloud Drive (dall'app File) o mandalo a te stesso: se perdi o cambi telefono, è l'unico modo per recuperare i dati.</p><div class=\"card warn\" style=\"margin:0 0 14px\"><p>⚠️ Su iPhone, se elimini l'icona di X-Pass dalla schermata Home, <b>vengono cancellati anche tutti i dati</b>. Prima fai sempre un backup.</p></div>":"Copialo anche fuori dal telefono (computer, Google Drive…): se perdi o cambi telefono, è l'unico modo per recuperare i dati.</p>"}<div class="list">
+${LI("expenc","💾","Fai un backup","Ultimo backup: "+bkText())}
+${NATIVE?LI("bkdir","📁","Cartella dei backup",stGet("bkdir")?"Documenti › X-Pass":"Non ancora creata: tocca per crearla"):""}
+${LI("bkset","🔔","Promemoria backup",r.on?"Avviso dopo "+(r.days==1?"1 giorno":r.days+" giorni")+" di modifiche non salvate":"Disattivato")}
+${LI("imp","📥","Importa dati","Da un backup di X-Pass (.vault) o da un file CSV di un altro gestore di password")}
+${LI("expcsv","📄","Esporta elenco CSV","File NON protetto: le password sono leggibili da chiunque")}</div>`}
 /* iPhone aperto in Safari: i dati di Safari e quelli dell'app sulla schermata Home sono separati, e Safari può cancellarli.
    Quindi prima si installa l'app, poi la si apre dall'icona. */
 let SKIPI=false;
 function rInstall(){app.innerHTML=`<div class="inst"><img class="lg" src="icon-180.png" alt=""><h1>Installa X-Pass</h1><p class="note" style="text-align:center">Per usare X-Pass sull'iPhone aggiungilo alla schermata Home (serve solo la prima volta, con internet).</p>
 <div class="card"><ol><li>Tocca <span class="k">Condividi ⬆︎</span> nella barra di Safari (se non lo vedi, tocca prima <span class="k">···</span>).</li><li>Scorri e tocca <span class="k">Aggiungi alla schermata Home</span>.</li><li>Lascia attivo <span class="k">Apri come app web</span> (se c'è) e tocca <span class="k">Aggiungi</span>.</li><li>Chiudi Safari e <b>apri X-Pass dall'icona</b> sulla schermata Home.</li></ol></div>
 <p class="note">Usa sempre l'icona: le password salvate da Safari non si vedono nell'app installata, e viceversa.</p><p style="text-align:center;margin-top:26px"><a href="#" data-a="skipi" class="note">Prova nel browser senza installare (sconsigliato)</a></p></div>`}
-function rLock(){if(IOS&&!STANDALONE&&!NATIVE&&!SKIPI)return rInstall();const ex=!!lsGet();LIM=lockPick();applyTheme();app.innerHTML=`<div class="lock${LIM?" wait":""}"><div class="box"><h1>X-Pass</h1>${ex?"":'<p class="note">Primo avvio: crea la password principale, l\'unica che dovrai ricordare.</p><div class="card warn" style="text-align:left;margin:12px 0"><p><b>⚠️ Leggi con attenzione</b><br>La password principale è l\'unica chiave della cassaforte e non viene salvata da nessuna parte. <b>Se la dimentichi, nessuno può recuperare i tuoi dati</b>, nemmeno chi ha creato l\'app. Scrivila su un foglio e conservalo in un posto sicuro.'+(IOS&&!NATIVE?'<br><br>I dati restano solo in questo iPhone: <b>se elimini l\'icona di X-Pass dalla schermata Home vengono cancellati</b>. Fai spesso il backup (menu ⚙️) e conservalo in File/iCloud Drive.':'')+'</p></div>'}
+function rLock(){if(IOS&&!STANDALONE&&!SKIPI)return rInstall();const ex=!!lsGet();LIM=lockPick();applyTheme();app.innerHTML=`<div class="lock${LIM?" wait":""}"><div class="box"><h1>X-Pass</h1>${ex?"":'<p class="note">Primo avvio: crea la password principale, l\'unica che dovrai ricordare.</p><div class="card warn" style="text-align:left;margin:12px 0"><p><b>⚠️ Leggi con attenzione</b><br>La password principale è l\'unica chiave della cassaforte e non viene salvata da nessuna parte. <b>Se la dimentichi, nessuno può recuperare i tuoi dati</b>, nemmeno chi ha creato l\'app. Scrivila su un foglio e conservalo in un posto sicuro.</p></div>'}
 <input type="password" id="mp" placeholder="Password principale">${ex?"":'<div id="lm" style="text-align:left;margin-bottom:8px"></div><input type="password" id="mp2" placeholder="Ripeti password"><label style="display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;color:var(--tx);margin:4px 0 6px"><input type="checkbox" id="ok1" style="width:auto;margin:3px 0 0;flex:none"> Ho capito: se dimentico la password principale perdo tutti i dati</label>'}<div class="err" id="er"></div><button class="p" id="go">${ex?"Sblocca":"Crea cassaforte"}</button><div id="bio" style="margin-top:22px"></div></div></div>`;showBio(go);
 if(LIM)setTimeout(()=>{const l=$(".lock");if(l)l.classList.remove("wait")},650);
-async function go(pp){const p=typeof pp=="string"?pp:$("#mp").value,er=$("#er");if(ex){try{const d=lsGet();SALT=unb(d.s);KEY=await derive(p,SALT);V=await open(d,KEY);V.icons=V.icons||{};V.lib=V.lib||[];migrate();MP=p;const n0=Object.keys(V.groups).length;cleanup();if(n0!=Object.keys(V.groups).length||(V.entries.length&&!V.dirty&&dataSig()!==V.bkSig))persist();view={v:"home"};applyTheme();render();keep();offerBio(p)}catch(e){KEY=null;er.textContent="Password errata"}}else{if(p.length<8)return er.textContent="Minimo 8 caratteri";if(p!==$("#mp2").value)return er.textContent="Le password non coincidono";if(!$("#ok1").checked)return er.textContent="Spunta la casella per confermare di aver letto l'avviso";SALT=crypto.getRandomValues(new Uint8Array(16));KEY=await derive(p,SALT);MP=p;V={groups:{},entries:[],del:{},icons:{},lib:[],theme:null};await persist();view={v:"home"};applyTheme();render();keep()}}
+async function go(pp){const p=typeof pp=="string"?pp:$("#mp").value,er=$("#er");if(ex){try{const d=lsGet();SALT=unb(d.s);KEY=await derive(p,SALT);V=await open(d,KEY);V.icons=V.icons||{};V.lib=V.lib||[];migrate();MP=p;const n0=Object.keys(V.groups).length;cleanup();if(n0!=Object.keys(V.groups).length||(V.entries.length&&!V.dirty&&dataSig()!==V.bkSig))persist();view={v:"home"};applyTheme();render();offerBio(p);keep()}catch(e){KEY=null;er.textContent="Password errata"}}else{if(p.length<8)return er.textContent="Minimo 8 caratteri";if(p!==$("#mp2").value)return er.textContent="Le password non coincidono";if(!$("#ok1").checked)return er.textContent="Spunta la casella per confermare di aver letto l'avviso";SALT=crypto.getRandomValues(new Uint8Array(16));KEY=await derive(p,SALT);MP=p;V={groups:{},entries:[],del:{},icons:{},lib:[],theme:null};await persist();view={v:"home"};applyTheme();render();keep();setTimeout(firstDir,400)}}
 if(!ex)$("#mp").oninput=()=>$("#lm").innerHTML=meter($("#mp").value);
 $("#go").onclick=()=>go();app.onkeydown=e=>{if(e.key=="Enter"&&view.v=="lock")go()}}
 let Q="";
+/* Ordine alfabetico senza distinguere maiuscole e accenti ("àrea" accanto ad "Area"), numeri in ordine naturale (2 prima di 10) */
+const az=(a,b)=>String(a||"").localeCompare(String(b||""),"it",{sensitivity:"base",numeric:true});
 const norm=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 /* Ricerca: nome, account, gruppo, commento e campi di testo (mai dentro le password) */
-function found(){const w=norm(Q).split(/\s+/).filter(Boolean);return V.entries.filter(e=>{const h=norm([e.name,e.account,e.group,e.comment,...e.fields.map(f=>f.label+" "+(f.type=="pw"?"":f.value))].join(" "));return w.every(x=>h.includes(x))}).sort((a,b)=>a.name.localeCompare(b.name,"it"))}
-function homeList(){if(Q.trim()){const r=found();return r.length?`<div class="grid">${r.map(e=>`<div class="tile" data-a="open" data-id="${e.id}"><div class="i">${ic(e.icon)}</div><div class="n">${esc(e.name)}</div><small>${esc(e.group)}</small></div>`).join("")}</div>`:'<p class="note" style="text-align:center">Nessun record trovato.</p>'}
-return`<div class="grid">${Object.entries(V.groups).map(([n,o])=>`<div class="tile" data-a="grp" data-n="${esc(n)}"><div class="i">${ic(o.icon)}</div><div class="n">${esc(n)}</div><small>${(c=>c+(c==1?" voce":" voci"))(V.entries.filter(e=>e.group==n).length)}</small></div>`).join("")}</div>`}
+function found(){const w=norm(Q).split(/\s+/).filter(Boolean);return V.entries.filter(e=>{const h=norm([e.name,e.account,e.accl,e.group,e.comment,...e.fields.map(f=>f.label+" "+(f.type=="pw"?"":f.value))].join(" "));return w.every(x=>h.includes(x))}).sort((a,b)=>az(a.name,b.name))}
+function homeList(){if(Q.trim()){const r=found();return r.length?`<div class="grid">${r.map(e=>`<div class="tile" data-a="open" data-id="${e.id}"><div class="i">${ic(e.icon)}</div><div class="n">${esc(e.name)}</div><small>${esc(e.group)}</small></div>`).join("")}</div>`:'<p class="note" style="text-align:center">Nessuna voce trovata.</p>'}
+if(!V.entries.length)return'<div class="card" style="text-align:center;margin-top:30px"><p style="margin:0 0 8px;font-size:17px"><b>La cassaforte è vuota</b></p><p class="note" style="margin:0">Tocca <b>＋</b> in basso a destra per salvare il primo account.<br>Se hai un backup, puoi recuperarlo da ⚙️ › Backup e dati › Importa dati.</p></div>';
+return`<div class="grid">${Object.entries(V.groups).sort((x,y)=>az(x[0],y[0])).map(([n,o])=>`<div class="tile" data-a="grp" data-n="${esc(n)}"><div class="i">${ic(o.icon)}</div><div class="n">${esc(n)}</div><small>${(c=>c+(c==1?" voce":" voci"))(V.entries.filter(e=>e.group==n).length)}</small></div>`).join("")}</div>`}
 function rHome(){app.innerHTML=`${bar("","X-Pass",MB)}${bkDue()?`<div class="card warn"><p><b>💾 ${V.lastBk?"Modifiche non salvate in un backup":"Non hai ancora fatto un backup"}</b><br>${V.lastBk?"Hai modifiche non salvate da "+(d=>d==1?"1 giorno":d+" giorni")(Math.floor((Date.now()-V.dirty)/DAY))+" (ultimo backup: "+bkText()+").":""} Se perdi o cambi telefono, senza un backup aggiornato le password sono perse.</p><div class="row2"><button data-a="bklater">Più tardi</button><button class="p" data-a="expenc">💾 Fai il backup</button></div></div>`:""}
-${V.entries.length?`<input class="srch" id="q" type="search" placeholder="🔍 Cerca nome, account, sito…" value="${esc(Q)}" autocomplete="off" enterkeyhint="search">`:""}<div id="hl">${homeList()}</div><button class="fab lk" data-a="lock" title="Blocca">🔒</button><button class="fab" data-a="new" title="Nuovo record">＋</button>`}
+${V.entries.length?`<input class="srch" id="q" type="search" placeholder="🔍 Cerca nome, account, sito…" value="${esc(Q)}" autocomplete="off" enterkeyhint="search">`:""}<div id="hl">${homeList()}</div><button class="fab lk" data-a="lock" title="Blocca">🔒</button><button class="fab" data-a="new" title="Nuova voce">＋</button>`}
 function rGroup(){const n=view.g,o=V.groups[n];if(!o){view={v:"home"};return render()}app.innerHTML=`${bar(BK,ic(o.icon)+" "+esc(n),'<button data-a="gedit" title="Modifica gruppo">✏️</button>')}
-<div class="grid">${V.entries.filter(e=>e.group==n).map(e=>`<div class="tile" data-a="open" data-id="${e.id}"><div class="i">${ic(e.icon)}</div><div class="n">${esc(e.name)}</div></div>`).join("")}</div><button class="fab lk" data-a="lock" title="Blocca">🔒</button>`}
-function rEntry(){const e=cur,ro=!e._new&&!e._ed,R=ro?"readonly":"";app.innerHTML=`${bar(BK,e._new?"Nuovo record":esc(e.name||"Record"),ro?'<button data-a="edit" title="Modifica">✏️</button>':"")}
-<div class="card"><label>Icona</label><button data-a="eicon" style="font-size:26px" id="ei" ${ro?"disabled":""}>${ic(e.icon)}</button><div id="ip"></div></div>
-<div class="card"><label>Nome</label><input data-k="name" value="${esc(e.name)}" ${R}></div>
-<div class="card gbox"><label>Gruppo</label><div class="row"><input data-k="group" placeholder="Scrivi o scegli un gruppo (es. Banche, Social, Lavoro)" value="${esc(e.group)}" autocomplete="off" ${R}>${ro?"":'<button data-a="gdd" style="flex:none" title="Mostra gruppi">▾</button>'}</div><div class="gs" id="gs" hidden></div></div>
-<div class="card"><label>Account</label><div class="row"><input data-k="account" value="${esc(e.account)}" autocomplete="off" ${R}><button data-a="copy">📋</button></div></div>
-<div class="card"><label>Password</label>${pwBlock('data-k="password"',e.password,ro)}</div>
-${e.fields.map(f=>`<div class="card" data-fid="${f.id}"><div class="row" style="margin-bottom:8px"><input data-fl placeholder="Intestazione campo" value="${esc(f.label)}" ${R}>${ro?"":'<button class="d" data-a="rm">✕</button>'}</div>${f.type=="pw"?pwBlock("data-fv",f.value,ro):`<div class="row"><input data-fv value="${esc(f.value)}" ${R}>${ro?'<button data-a="copy">📋</button>':""}</div>`}</div>`).join("")}
-${ro?"":`<div class="card"><label>Aggiungi campo</label><div class="row"><button data-a="addt">＋ Testo</button><button data-a="addp">＋ Password</button></div></div>`}
-<div class="card"><label>Commento</label><textarea data-k="comment" rows="2" ${R}>${esc(e.comment)}</textarea></div>
-${ro?"":`<div class="end">${e._new?"<span></span>":'<button class="d" data-a="del">🗑 Elimina record</button>'}<button class="p" data-a="save">✔ Salva</button></div>`}`;fitTA()}
+<div class="grid">${V.entries.filter(e=>e.group==n).sort((a,b)=>az(a.name,b.name)).map(e=>`<div class="tile" data-a="open" data-id="${e.id}"><div class="i">${ic(e.icon)}</div><div class="n">${esc(e.name)}</div></div>`).join("")}</div><button class="fab lk" data-a="lock" title="Blocca">🔒</button><button class="fab" data-a="new" title="Nuova voce in questo gruppo">＋</button>`}
+/* Record: in lettura si vedono solo i campi compilati; in modifica tutti, con il nome del campo Account modificabile e la scelta Password / PIN */
+const SEG=pin=>`<div class="seg2">${["Password","PIN"].map(x=>`<button data-a="pwl" data-l="${x}" class="${(x=="PIN")==pin?"p":""}">${x}</button>`).join("")}</div>`;
+function rEntry(){const e=cur,ro=!e._new&&!e._ed,R=ro?"readonly":"",pin=e.pwl=="PIN",al=e.accl||"Account",cp='<button data-a="copy" title="Copia">📋</button>';
+if(ro){const g=V.groups[e.group],fs=e.fields.filter(f=>(f.value||"").trim());app.innerHTML=`${bar(BK,ic(e.icon)+" "+esc(e.name||"Voce"),'<button data-a="edit" title="Modifica">✏️</button>')}<p class="sub">${g?ic(g.icon)+" ":""}${esc(e.group)}</p>
+${e.account?`<div class="card"><label>${esc(al)}</label><div class="row"><input data-k="account" value="${esc(e.account)}" readonly>${cp}</div></div>`:""}
+${e.password?`<div class="card"><label>${pin?"PIN":"Password"}</label>${pwBlock('data-k="password"',e.password,1,pin)}</div>`:""}
+${fs.map(f=>`<div class="card" data-fid="${f.id}"><label>${esc(f.label||(f.type=="pw"?(f.pwl=="PIN"?"PIN":"Password"):"Campo"))}</label>${f.type=="pw"?pwBlock("data-fv",f.value,1,f.pwl=="PIN"):`<div class="row"><input data-fv value="${esc(f.value)}" readonly>${cp}</div>`}</div>`).join("")}
+${(e.comment||"").trim()?`<div class="card"><label>Commento</label><textarea data-k="comment" readonly>${esc(e.comment)}</textarea></div>`:""}
+${!e.account&&!e.password&&!fs.length&&!(e.comment||"").trim()?'<p class="note" style="text-align:center">Nessun dato salvato. Tocca ✏️ in alto a destra per aggiungerne.</p>':""}`;fitTA();return}
+app.innerHTML=`${bar(BK,e._new?"Nuova voce":"Modifica voce")}
+<div class="card"><label>Icona <span class="note">(tocca per cambiarla)</span></label><button data-a="eicon" style="font-size:26px" id="ei">${ic(e.icon)}</button><div id="ip"></div></div>
+<div class="card"><label>Nome</label><input data-k="name" value="${esc(e.name)}" placeholder="Es. Banca, Gmail, Amazon" autocomplete="off"></div>
+<div class="card gbox"><label>Gruppo</label><div class="row"><input data-k="group" placeholder="Scrivi o scegli un gruppo (es. Banche, Social, Lavoro)" value="${esc(e.group)}" autocomplete="off"><button data-a="gdd" style="flex:none" title="Mostra gruppi">▾</button></div><div class="gs" id="gs" hidden></div></div>
+<div class="card"><div class="row" style="margin-bottom:6px"><input class="lbl" data-k="accl" value="${esc(al)}" placeholder="Account" autocomplete="off" title="Tocca per cambiare il nome del campo" style="margin:0"><span class="note" style="flex:none">✏️ rinomina</span></div><input data-k="account" value="${esc(e.account)}" placeholder="Nome utente, e-mail, codice cliente…" autocomplete="off"></div>
+<div class="card">${SEG(pin)}${pwBlock('data-k="password"',e.password,0,pin)}</div>
+${e.fields.map(f=>`<div class="card" data-fid="${f.id}"><div class="row" style="margin-bottom:8px"><input data-fl placeholder="${f.type=="pw"?"Nome del campo (es. PIN carta, Password Wi-Fi)":"Nome del campo (es. Sito web, Codice)"}" value="${esc(f.label)}"><button class="d" data-a="rm" title="Elimina campo">✕</button></div>${f.type=="pw"?SEG(f.pwl=="PIN")+pwBlock("data-fv",f.value,0,f.pwl=="PIN"):`<input data-fv value="${esc(f.value)}">`}</div>`).join("")}
+<div class="card"><label>Aggiungi un campo</label><div class="row add"><button data-a="addt">＋ Testo</button><button data-a="addp">＋ Password/PIN</button></div></div>
+<div class="card"><label>Commento</label><textarea data-k="comment" rows="2" placeholder="Note libere">${esc(e.comment)}</textarea></div>
+<div class="end">${e._new?"<span></span>":'<button class="d" data-a="del">🗑 Elimina voce</button>'}<button class="p" data-a="save">✔ Salva</button></div>`;fitTA()}
 /* Il commento si allunga da solo con le righe scritte (niente maniglia per ridimensionarlo) */
 function fitTA(t){(t?[t]:app.querySelectorAll("textarea")).forEach(x=>{x.style.height="auto";x.style.height=Math.max(70,x.scrollHeight+2)+"px"})}
-function rTheme(){const t=V.theme||cc(),kf=(LK.imgs.find(x=>x.id==LK.fix)||LK.imgs[0]||{}).id;app.innerHTML=`${bar(BK,"Personalizza")}
+/* Personalizza. Le icone personali si caricano ed eliminano direttamente dalla scelta dell'icona (record e gruppi) */
+const KM={fix:"Compare sempre l'immagine segnata con 📌.",acc:"Compare un'immagine diversa ogni volta che apri X-Pass, a turno.",day:"L'immagine cambia una volta al giorno, a turno.",mon:"L'immagine cambia una volta al mese, a turno."};
+function rTheme(){const t=V.theme||cc(),kf=(LK.imgs.find(x=>x.id==LK.fix)||LK.imgs[0]||{}).id;app.innerHTML=`${bar(BK,"🎨 Personalizza")}
 <div class="card"><label>Temi pronti</label><div class="pick">${PRE.map((p,i)=>`<button data-a="pre" data-i="${i}" style="background:${p[1]};color:${p[3]};border-color:${p[4]};font-size:14px">${p[0]}</button>`).join("")}</div></div>
-<div class="card"><label>Colori</label>${[["bg","Sfondo"],["card","Celle e schede"],["tx","Testo"],["ac","Pulsanti"]].map(([k,n])=>`<div class="row" style="margin:6px 0"><span style="flex:1">${n}</span><button data-a="pickc" data-c="${k}" data-n="${n}" style="width:64px;height:40px;flex:none;background:${t[k]}"></button></div>`).join("")}</div>
-<div class="card"><label>Sfondo della pagina iniziale</label><div class="seg">${[["fix","📌 Fissa"],["acc","Ad accesso"],["day","Giornaliero"],["mon","Mensile"]].map(([k,n])=>`<button data-a="kmode" data-m="${k}" class="${LK.mode==k?"p":""}">${n}</button>`).join("")}</div>
-<div class="pick thumbs">${LK.imgs.map(x=>`<button data-a="kimg" data-id="${x.id}"><img src="${x.u}">${LK.mode=="fix"&&kf==x.id?"<span>📌</span>":""}</button>`).join("")}<button data-a="kadd">＋ Carica</button></div><div class="note">${{fix:"Si usa sempre l'immagine con 📌.",acc:"L'immagine cambia ogni volta che apri X-Pass.",day:"L'immagine cambia una volta al giorno.",mon:"L'immagine cambia una volta al mese."}[LK.mode]}${LK.mode!="fix"&&LK.imgs.length<2?" Carica almeno 2 immagini perché cambi.":""} Le immagini compaiono intere, senza tagli: le anteprime mostrano come si vedranno sullo schermo. Tocca un'immagine per sceglierla o eliminarla. Queste immagini non sono cifrate, perché devono comparire prima dello sblocco.</div></div>
-<div class="card"><label>Sfondo delle pagine interne</label><div class="pick thumbs">${V.lib.map(x=>`<button data-a="limg" data-id="${x.id}"><img src="${x.u}">${t.imgId==x.id?"<span>📌</span>":""}</button>`).join("")}<button data-a="libadd">＋ Carica</button></div><div class="note">Tocca un'immagine per usarla come sfondo (📌), copiarla nella pagina iniziale o eliminarla.</div></div>
-<div class="card"><label>Le mie icone</label><div class="pick">${Object.keys(V.icons).map(id=>`<button data-a="icrm" data-id="${id}">${ic("img:"+id)}</button>`).join("")}<button data-a="icadd">＋ Carica</button></div><div class="note">Poi le trovi nella scelta icone di record e gruppi. Tocca un'icona per eliminarla.</div></div>
-<button data-a="treset" style="width:100%">Ripristina predefiniti (colori e sfondo interno)</button>`}
+<div class="card"><label>Colori</label>${[["bg","Sfondo"],["card","Riquadri e pulsanti"],["tx","Testo"],["ac","Pulsanti principali"]].map(([k,n])=>`<div class="row" style="margin:6px 0"><span style="flex:1">${n}</span><button data-a="pickc" data-c="${k}" data-n="${n}" style="width:64px;height:40px;flex:none;background:${t[k]}"></button></div>`).join("")}</div>
+<div class="card"><label>Sfondo della schermata di sblocco</label><p class="note" style="margin:0 0 8px">È la prima schermata, quella in cui inserisci la password principale.</p><div class="seg">${[["fix","📌 Fissa"],["acc","Ad ogni accesso"],["day","Ogni giorno"],["mon","Ogni mese"]].map(([k,n])=>`<button data-a="kmode" data-m="${k}" class="${LK.mode==k?"p":""}">${n}</button>`).join("")}</div>
+<div class="pick thumbs">${LK.imgs.map(x=>`<button data-a="kimg" data-id="${x.id}"><img src="${x.u}">${LK.mode=="fix"&&kf==x.id?"<span>📌</span>":""}</button>`).join("")}<button data-a="kadd">＋ Carica</button></div><div class="note">${LK.imgs.length?KM[LK.mode]+(LK.mode!="fix"&&LK.imgs.length<2?" Carica almeno 2 immagini perché cambi.":"")+" Tocca un'immagine per vederla, sceglierla o eliminarla.":"Nessuna immagine: carica una o più foto."} Queste immagini non sono cifrate (compaiono prima dello sblocco) e non vanno nel backup.</div></div>
+<div class="card"><label>Sfondo delle altre pagine</label><div class="pick thumbs">${V.lib.map(x=>`<button data-a="limg" data-id="${x.id}"><img src="${x.u}">${t.imgId==x.id?"<span>📌</span>":""}</button>`).join("")}<button data-a="libadd">＋ Carica</button></div><div class="note">${V.lib.length?"L'immagine con 📌 è lo sfondo in uso. Tocca un'immagine per usarla, toglierla, usarla anche nella schermata di sblocco o eliminarla.":"Nessuna immagine: le pagine hanno il colore di sfondo scelto sopra."} Queste immagini non vanno nel backup: restano solo su questo telefono.</div></div>
+<button data-a="treset" style="width:100%">Ripristina colori predefiniti e togli lo sfondo delle altre pagine</button>`}
 
 /* Backup / esportazione */
-async function saveFile(name,text,mime){const SF=plug("SaveFile");let why="";if(SF){away();try{const r=await SF.save({name,data:text,mime});if(r&&r.size>=0&&r.size!=r.expected)return say("Attenzione: il file "+name+" NON è stato salvato completamente ("+r.size+" byte su "+r.expected+"). Eliminalo e riprova a esportare, magari in un'altra cartella.");say("File salvato: "+name+(r&&r.size>0?" ("+Math.round(r.size/1024)+" KB)":""));return true}catch(e){const m=String(e&&e.message||e);if(/cancel/i.test(m))return;why=m}}
+async function saveFile(name,text,mime){const SF=plug("SaveFile");let why="";if(SF){away();try{const pk=await SF.pick({name,mime,dir:stGet("bkdir")?BKDIR:undefined});toast("Salvataggio in corso…");await SF.begin({uri:pk.uri});
+/* a blocchi da 200.000 caratteri, senza spezzare un carattere doppio (emoji) a metà */
+for(let i=0;i<text.length;){let j=Math.min(text.length,i+200000);const c=text.charCodeAt(j-1);if(j<text.length&&c>=0xD800&&c<=0xDBFF)j--;await SF.chunk({data:text.slice(i,j)});i=j}
+const r=await SF.end();if(r&&r.size===0&&text.length)return say("Attenzione: il file "+name+" è rimasto VUOTO (0 byte). Eliminalo e riprova a esportare, magari in un'altra cartella.");if(r&&r.size>=0&&r.size!=r.expected)return say("Attenzione: il file "+name+" NON è stato salvato completamente ("+r.size+" byte su "+r.expected+"). Eliminalo e riprova a esportare, magari in un'altra cartella.");say("File salvato: "+name+(r&&r.size>0?" ("+(r.size<1048576?Math.max(1,Math.round(r.size/1024))+" KB":(r.size/1048576).toFixed(1).replace(".",",")+" MB")+")":""));return true}catch(e){const m=String(e&&e.message||e);if(/cancel/i.test(m))return;why=m}}
 const F=plug("Filesystem");if(F){try{await F.writeFile({path:"X-Pass/"+name,data:text,directory:"DOCUMENTS",encoding:"utf8",recursive:true});say("File salvato nella cartella Documenti › X-Pass del telefono, con il nome "+name+(why?"\n\n(Finestra 'Salva con nome' non disponibile: "+why+")":""));return true}catch(e){say("Salvataggio non riuscito: "+(e&&e.message||e)+(why?" / "+why:""));return}}
 /* iPhone: il file si salva dal foglio di condivisione («Salva su File», AirDrop, Mail…). Serve un tocco dell'utente per aprirlo, quindi prima una finestra con il pulsante Salva */
 if(IOS&&navigator.canShare){let f;try{f=new File([text],name,{type:mime})}catch(e){}if(f&&navigator.canShare({files:[f]}))return shareFile(f)}
 const u=URL.createObjectURL(new Blob([text],{type:mime})),l=document.createElement("a");l.href=u;l.download=name;l.click();return true}
-function shareFile(f){return new Promise(res=>{const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><p style="margin:0 0 8px"><b>📄 File pronto: ${esc(f.name)}</b> <span class="note">(${Math.max(1,Math.round(f.size/1024))} KB)</span></p><p class="note" style="margin:0 0 14px">Tocca «Salva», poi scegli <b>Salva su File</b> (consigliato: una cartella di iCloud Drive) oppure mandalo a te stesso con AirDrop o Mail.</p><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">💾 Salva</button></div></div>`;document.body.appendChild(o);
+function shareFile(f){return new Promise(res=>{const o=document.createElement("div");o.className="ov";const kb=f.size<1048576?Math.max(1,Math.round(f.size/1024))+" KB":(f.size/1048576).toFixed(1).replace(".",",")+" MB";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><div class="mt"><b>📄 File pronto</b>${XB}</div><p style="margin:0 0 8px;word-break:break-all">${esc(f.name)} <span class="note">(${kb})</span></p><p class="note" style="margin:0 0 14px">Tocca «Salva», poi scegli <b>Salva su File</b> (consigliato: una cartella di iCloud Drive) oppure mandalo a te stesso con AirDrop o Mail.</p><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">💾 Salva</button></div></div>`;document.body.appendChild(o);
 o.onclick=e=>{const b=e.target.closest("button");if(!b)return;o.remove();if(b.dataset.v!="1")return res(false);away();navigator.share({files:[f]}).then(()=>{back();toast("File salvato o inviato");res(true)},x=>{back();if(x&&x.name!="AbortError")say("Salvataggio non riuscito: "+(x.message||x.name));res(false)})}})}
+/* Cartella dei backup: Documenti › X-Pass (la stessa usata se la finestra "Salva con nome" non è disponibile) */
+const BKDIR="Documents/X-Pass";
+async function mkBkDir(quiet){const F=plug("Filesystem");if(!F){if(!quiet)say("La cartella dei backup si può creare solo nell'app Android.");return false}away();try{await F.mkdir({path:"X-Pass",directory:"DOCUMENTS",recursive:true})}catch(e){const m=String(e&&e.message||e);if(!/exist/i.test(m)){if(!quiet)say("Non sono riuscito a creare la cartella ("+m+"). Puoi crearla anche dalla finestra «Salva con nome» quando fai il backup.");return false}}await stSet("bkdir","1");return true}
+const DIRMSG="Cartella pronta: Documenti › X-Pass. Quando fai un backup, la finestra «Salva con nome» si apre già lì. Ogni tanto copia i backup anche fuori dal telefono (computer, Google Drive…).";
+async function firstDir(){if(!plug("Filesystem")||stGet("bkdir"))return;if(await dlg("📁 Vuoi che X-Pass crei sul telefono la cartella per i backup?<br><br>Verrà creata in <b>Documenti › X-Pass</b>. Quando farai un backup, la finestra «Salva con nome» si aprirà già lì.",'<button data-v="0">Non ora</button><button class="p" data-v="1">📁 Crea cartella</button>')&&await mkBkDir())say(DIRMSG)}
 /* Promemoria backup: compare se non è mai stato fatto, o se è più vecchio di 30 giorni e da allora ci sono modifiche */
 const DAY=864e5;
 function bkAge(){return V.lastBk?Math.floor((Date.now()-V.lastBk)/DAY):null}
@@ -220,8 +276,9 @@ function dataSig(){const s=JSON.stringify([V.entries,V.groups]);let h=2166136261
 function trackDirty(){if(!V.entries.length&&!V.lastBk){delete V.dirty;return}if(dataSig()===V.bkSig)delete V.dirty;else if(!V.dirty)V.dirty=Date.now()}
 const bkCfg=()=>Object.assign({on:true,days:7},V.bkRem||{});
 function bkDue(){const r=bkCfg();if(!r.on||!V.dirty||!V.entries.length)return false;if(V.bkSnooze&&Date.now()-V.bkSnooze<Math.min(7,r.days)*DAY)return false;return Date.now()-V.dirty>=r.days*DAY}
-async function doBackup(){const ok=await saveFile("x-pass-backup.vault",JSON.stringify(await seal(Object.assign({},V,{lk:LK}),KEY,SALT)),"application/octet-stream");if(ok){V.lastBk=Date.now();V.bkSig=dataSig();delete V.dirty;delete V.bkSnooze;await persist();if(view.v=="home")render()}}
-function bkSet(){const r=bkCfg(),o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><b>🔔 Promemoria backup</b><p class="note" style="margin:8px 0 14px">Nella pagina principale compare un avviso quando ci sono modifiche (record nuovi, cambiati o eliminati) non ancora salvate in un backup da troppo tempo.</p>
+/* Il backup contiene voci, gruppi, icone personali e impostazioni, ma NON le immagini di sfondo (sono foto della galleria del telefono) */
+async function doBackup(){const d=new Date(),dt=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");const ok=await saveFile("x-pass-backup-"+dt+".vault",JSON.stringify(await seal(Object.assign({},V,{lib:[]}),KEY,SALT)),"application/octet-stream");if(ok){V.lastBk=Date.now();V.bkSig=dataSig();delete V.dirty;delete V.bkSnooze;await persist();if(view.v=="home"||view.v=="bk")render()}}
+function bkSet(){const r=bkCfg(),o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0">${hd("🔔 Promemoria backup")}<p class="note" style="margin:0 0 14px">Nella pagina principale compare un avviso quando ci sono modifiche (voci nuove, cambiate o eliminate) non ancora salvate in un backup da troppo tempo.</p>
 <label style="display:flex;gap:10px;align-items:center;color:var(--tx);font-size:15px"><input type="checkbox" id="bkon" style="width:22px;height:22px;flex:none;margin:0" ${r.on?"checked":""}> Promemoria attivo</label>
 <label style="margin-top:14px">Avvisami dopo quanti giorni dalla prima modifica non salvata</label><select id="bkd">${[1,3,7,14,30,60].map(d=>`<option value="${d}" ${d==r.days?"selected":""}>${d==1?"1 giorno":d+" giorni"}</option>`).join("")}</select>
 <div class="row2" style="margin-top:16px"><button data-v="0">Annulla</button><button class="p" data-v="1">✔ Salva</button></div></div>`;document.body.appendChild(o);
@@ -234,19 +291,19 @@ function merge(R){let n=0;if(R.lastBk&&!V.lastBk)V.lastBk=R.lastBk;Object.assign
 for(const e of R.entries||[]){const i=V.entries.findIndex(x=>x.id==e.id);if(i<0){V.entries.push(e);delete V.del[e.id];n++}else if(V.entries[i].updated<e.updated)V.entries[i]=e;
 if(!V.groups[e.group])V.groups[e.group]=(R.groups||{})[e.group]||{icon:GIC(e.group)}}return n}
 function cleanup(){for(const g of Object.keys(V.groups))if(!V.entries.some(e=>e.group==g))delete V.groups[g]}
-function modal(h){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0">${h}</div>`;o.onclick=e=>{if(e.target==o||e.target.dataset.a=="close")o.remove()};document.body.appendChild(o)}
+function modal(h,t){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0">${hd(t||"")}${h}</div>`;o.onclick=e=>{if(e.target==o||e.target.closest('[data-a="close"]'))o.remove()};document.body.appendChild(o)}
 
 /* Cambio password principale */
-const askPw=m=>new Promise(r=>{const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><p style="margin:0 0 10px">${esc(m)}</p><input type="password" id="apw"><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">OK</button></div></div>`;document.body.appendChild(o);const i=o.querySelector("#apw");i.focus();o.onclick=e=>{const b=e.target.closest("button");if(b){o.remove();r(b.dataset.v=="1"?i.value:null)}}});
-function chPw(){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><b>Cambia password principale</b><p class="note">I backup cifrati già esportati restano protetti dalla vecchia password: per importarli ti verrà chiesta.</p><label>Password attuale</label><input type="password" id="op"><label style="margin-top:10px">Nuova password</label><input type="password" id="np"><div id="nm">${meter("")}</div><label style="margin-top:10px">Ripeti nuova password</label><input type="password" id="np2"><div class="err" id="cer"></div><div class="row2"><button id="cx">Annulla</button><button class="p" id="cok">✔ Cambia</button></div></div>`;
+const askPw=m=>new Promise(r=>{const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><div class="mt"><p>${esc(m)}</p>${XB}</div><input type="password" id="apw"><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">OK</button></div></div>`;document.body.appendChild(o);const i=o.querySelector("#apw");i.focus();o.onclick=e=>{const b=e.target.closest("button");if(b){o.remove();r(b.dataset.v=="1"?i.value:null)}}});
+function chPw(){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0">${hd("Cambia password principale")}<p class="note">I backup cifrati già esportati restano protetti dalla vecchia password: per importarli ti verrà chiesta.</p><label>Password attuale</label><input type="password" id="op"><label style="margin-top:10px">Nuova password</label><input type="password" id="np"><div id="nm">${meter("")}</div><label style="margin-top:10px">Ripeti nuova password</label><input type="password" id="np2"><div class="err" id="cer"></div><div class="row2"><button id="cx">Annulla</button><button class="p" id="cok">✔ Cambia</button></div></div>`;
 document.body.appendChild(o);const g=q=>o.querySelector(q);g("#op").focus();g("#np").oninput=()=>g("#nm").innerHTML=meter(g("#np").value);
-o.onclick=async e=>{if(e.target.closest("#cx")){o.remove();return}if(!e.target.closest("#cok"))return;const er=g("#cer"),a=g("#op").value,n=g("#np").value;
+o.onclick=async e=>{if(e.target.closest("#cx,.x")){o.remove();return}if(!e.target.closest("#cok"))return;const er=g("#cer"),a=g("#op").value,n=g("#np").value;
 if(a!==MP)return er.textContent="Password attuale errata";if(n.length<8)return er.textContent="La nuova password deve avere almeno 8 caratteri";if(n!==g("#np2").value)return er.textContent="Le nuove password non coincidono";if(n===MP)return er.textContent="La nuova password è uguale a quella attuale";
 er.textContent="Attendi…";const s=crypto.getRandomValues(new Uint8Array(16)),k=await derive(n,s),oS=SALT,oK=KEY;SALT=s;KEY=k;
 try{const d=await seal(V,k,s);await stSet("vault1",JSON.stringify(d))}catch(x){SALT=oS;KEY=oK;return er.textContent="Salvataggio non riuscito: "+x.message}
 MP=n;const nb=plug("NativeBiometric");let bm="";if(nb&&stGet("bio1")){try{await nb.setCredentials({username:"vault",password:n,server:"xpass.app"})}catch(x){await stDel("bio1")}}
-else if(!nb&&stGet("pk1")){await stDel("pk1");bm="\n\nLo sblocco con "+BIOL+" è stato disattivato: riattivalo dal menu ⚙️ › Accesso biometrico."}
-o.remove();say("Password principale cambiata."+bm)}}
+else if(!nb&&stGet("pk1")){await stDel("pk1");bm="\n\nLo sblocco con "+BIOL+" è stato disattivato: riattivalo da ⚙️ › Sicurezza."}
+o.remove();say("Password principale cambiata."+bm);if(view.v=="sec")render()}}
 
 /* Biometria (solo app Android) — finestra di sistema senza titolo né descrizione: Android non accetta un titolo vuoto, quindi uno spazio */
 const BIO={title:" ",negativeButtonText:"Annulla"};
@@ -262,9 +319,9 @@ const prfOut=c=>{try{const r=c.getClientExtensionResults().prf;return r&&r.resul
 function pkGet(id,salt){return navigator.credentials.get({publicKey:{challenge:rnd32(),rpId:location.hostname,allowCredentials:[{type:"public-key",id:unb(id)}],userVerification:"required",timeout:120000,extensions:{prf:{eval:{first:unb(salt)}}}}})}
 function pkCreate(salt){return navigator.credentials.create({publicKey:{rp:{name:"X-Pass",id:location.hostname},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:"X-Pass",displayName:"X-Pass · sblocco con "+BIOL},challenge:rnd32(),pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",residentKey:"required",requireResidentKey:true,userVerification:"required"},timeout:120000,extensions:{prf:{eval:{first:salt}}}}})}
 /* Finestra il cui pulsante chiama subito fn (serve il tocco diretto per Face ID) */
-function dlgNow(h,label,fn){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><p style="margin:0 0 14px">${h}</p><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">${label}</button></div></div>`;document.body.appendChild(o);o.onclick=e=>{const b=e.target.closest("button");if(!b)return;o.remove();if(b.dataset.v=="1")fn()}}
+function dlgNow(h,label,fn){const o=document.createElement("div");o.className="ov";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><div class="mt"><p>${h}</p>${XB}</div><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">${label}</button></div></div>`;document.body.appendChild(o);o.onclick=e=>{const b=e.target.closest("button");if(!b)return;o.remove();if(b.dataset.v=="1")fn()}}
 const pkFail=e=>say(e&&e.name=="NotAllowedError"?"Operazione annullata.":"Non è stato possibile usare "+BIOL+": "+(e&&(e.message||e.name)||e)+"\n\nControlla in Impostazioni › Password › Opzioni password che sia attivo «Usa Portachiavi iCloud» / «Password».");
-async function pkSave(id,out){await stSet("pk1",JSON.stringify(Object.assign({id},await seal({p:MP},await pkKey(out),ST.pkSalt))));back();say("Sblocco con "+BIOL+" attivato. Da ora nella pagina iniziale c'è il pulsante «Sblocca con "+BIOL+"».")}
+async function pkSave(id,out){await stSet("pk1",JSON.stringify(Object.assign({id},await seal({p:MP},await pkKey(out),ST.pkSalt))));back();if(view.v=="sec")render();say("Sblocco con "+BIOL+" attivato. Da ora nella schermata di sblocco c'è il pulsante «Sblocca con "+BIOL+"».")}
 /* Attivazione: crea la passkey; se iOS non restituisce già il segreto, chiede una seconda conferma */
 function pkEnable(){const salt=rnd32();ST.pkSalt=salt;away();pkCreate(salt).then(async c=>{const id=b64(new Uint8Array(c.rawId)),ex=c.getClientExtensionResults().prf;
 if(!ex||ex.enabled===false){back();return say("Questo iPhone non permette lo sblocco con "+BIOL+" per le app web (serve iOS 18 o successivo con il Portachiavi iCloud attivo). Continua a usare la password principale.")}
@@ -272,20 +329,20 @@ const out=prfOut(c);if(out)return pkSave(id,out);
 dlgNow("Ultimo passo: conferma ancora una volta con "+BIOL+" per completare l'attivazione.","✔ Conferma",()=>{pkGet(id,b64(salt)).then(g=>{const o2=prfOut(g);if(!o2){back();return say("Questo iPhone non restituisce la chiave per lo sblocco: aggiorna iOS e riprova.")}return pkSave(id,o2)}).catch(e=>{back();pkFail(e)})})}).catch(e=>{back();pkFail(e)})}
 function pkUnlock(go){const b=lsJ("pk1");if(!b)return;away();pkGet(b.id,b.s).then(async g=>{back();const out=prfOut(g);if(!out)throw new Error("chiave non ricevuta");let p;try{p=(await open(b,await pkKey(out))).p}catch(e){throw new Error("dati di sblocco non validi: disattiva e riattiva "+BIOL)}go(p)}).catch(e=>{back();const er=$("#er");if(er)er.textContent=e&&e.name=="NotAllowedError"?BIOL+" annullato":"Sblocco non riuscito: "+(e&&e.message||e)})}
 
-async function showBio(go){const el0=$("#bio");if(!el0)return;const n=plug("NativeBiometric");
+async function showBio(go){const n=plug("NativeBiometric");
 if(!n){if(!stGet("pk1")||!await pkAvail())return;const el=$("#bio");if(!el)return;el.innerHTML='<button class="p" id="bb">'+FP+' Sblocca con '+BIOL+'</button>';$("#bb").onclick=()=>pkUnlock(go);return}
 if(!stGet("bio1"))return;try{if(!(await n.isAvailable()).isAvailable)return}catch(e){return}
 const el=$("#bio");if(!el)return;el.innerHTML='<button class="p" id="bb">'+FP+' Sblocca con impronta / volto</button>';$("#bb").onclick=async()=>{away();try{await n.verifyIdentity(BIO);go((await n.getCredentials({server:"xpass.app"})).password)}catch(e){$("#er").textContent="Biometria annullata o non riuscita"}}}
 async function offerBio(p){const n=plug("NativeBiometric");if(stGet("bioask"))return;
-if(!n){if(stGet("pk1")||!await pkAvail())return;await stSet("bioask","1").catch(()=>{});dlgNow("Vuoi sbloccare X-Pass con "+BIOL+"? <span class=\"note\">(iOS salverà una passkey «X-Pass» nell'app Password: serve solo per lo sblocco)</span>","Attiva",pkEnable);return}
-if(stGet("bio1"))return;await stSet("bioask","1").catch(()=>{});try{if((await n.isAvailable()).isAvailable&&await ask("Vuoi sbloccare X-Pass con impronta/volto?")){await n.setCredentials({username:"vault",password:p,server:"xpass.app"});await stSet("bio1","1")}}catch(e){}}
+if(!n){if(stGet("pk1")||!await pkAvail())return;await stSet("bioask","1").catch(()=>{});dlgNow("Vuoi sbloccare X-Pass anche con "+BIOL+", senza scrivere la password principale? <span class=\"note\">(iOS salverà una passkey «X-Pass» nell'app Password: serve solo per lo sblocco)</span>","Attiva",pkEnable);return}
+if(stGet("bio1"))return;await stSet("bioask","1").catch(()=>{});try{if((await n.isAvailable()).isAvailable&&await ask("Vuoi sbloccare X-Pass anche con l'impronta o il volto, senza scrivere la password principale?")){await n.setCredentials({username:"vault",password:p,server:"xpass.app"});await stSet("bio1","1")}}catch(e){}}
 
 async function bioMenu(){const n=plug("NativeBiometric");if(!n){
 if(stGet("pk1")){if(await ask("Lo sblocco con "+BIOL+" è attivo. Vuoi disattivarlo?")){const b=lsJ("pk1");await stDel("pk1");try{if(PublicKeyCredential.signalUnknownCredential)await PublicKeyCredential.signalUnknownCredential({rpId:location.hostname,credentialId:b.id.replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")})}catch(e){}say("Sblocco con "+BIOL+" disattivato. Se vuoi, puoi eliminare anche la passkey «X-Pass» dall'app Password dell'iPhone.")}return}
 if(!await pkAvail())return say(IOS?"Su questo iPhone "+BIOL+" non è disponibile per X-Pass. Controlla di avere iOS 18 o successivo, Face ID o Touch ID attivi e il Portachiavi iCloud acceso.":"Lo sblocco biometrico non è disponibile su questo dispositivo.");
 return dlgNow("Attivare lo sblocco con "+BIOL+"? <span class=\"note\">(iOS salverà una passkey «X-Pass» nell'app Password: serve solo per lo sblocco)</span>","Attiva",pkEnable)}
 let ok=false;try{ok=(await n.isAvailable()).isAvailable}catch(e){}
-if(stGet("bio1")){if(await ask("L'accesso biometrico è attivo. Vuoi disattivarlo?")){try{await n.deleteCredentials({server:"xpass.app"})}catch(e){}await stDel("bio1");say("Accesso biometrico disattivato.")}return}
+if(stGet("bio1")){if(await ask("L'accesso biometrico (impronta o volto) è attivo. Vuoi disattivarlo?")){try{await n.deleteCredentials({server:"xpass.app"})}catch(e){}await stDel("bio1");say("Accesso biometrico disattivato.")}return}
 if(!ok)return say("Su questo telefono l'impronta o il volto non sono disponibili. Controlla di averli registrati nelle Impostazioni di Android.");
 if(!await ask("Attivare lo sblocco con impronta o volto?"))return;away();try{await n.verifyIdentity(BIO);await n.setCredentials({username:"vault",password:MP,server:"xpass.app"});await stSet("bio1","1");say("Accesso biometrico attivato.")}catch(e){say("Attivazione annullata o non riuscita.")}}
 
@@ -298,16 +355,16 @@ const SKIP=["guid","timecreated","timelastused","timepasswordchanged","httprealm
 function csvEntries(rows){const H=rows[0].map(x=>x.trim().toLowerCase()),used=new Set(),ix={};for(const[k,names]of Object.entries(COL)){for(const n of names){const i=H.indexOf(n);if(i>=0&&!used.has(i)){ix[k]=i;used.add(i);break}}}
 if(ix.password==null)return null;const lab={url:"Sito web"};const out=[];
 for(const r of rows.slice(1)){const g=k=>ix[k]!=null?(r[ix[k]]||"").trim():"";const fields=[];if(g("url"))fields.push({id:uid(),label:"Sito web",type:"text",value:g("url")});
-H.forEach((h,i)=>{if(used.has(i)||SKIP.includes(h))return;const v=(r[i]||"").trim();if(!v)return;if(h=="campi extra"){v.split(" | ").forEach(x=>{const k=x.indexOf(": ");if(k>0)fields.push({id:uid(),label:x.slice(0,k),type:"text",value:x.slice(k+2)})});return}fields.push({id:uid(),label:rows[0][i].trim(),type:/totp|pin|otp/i.test(h)?"pw":"text",value:v})});
+H.forEach((h,i)=>{if(used.has(i)||SKIP.includes(h))return;const v=(r[i]||"").trim();if(!v)return;if(h=="campi extra"){v.split(" | ").forEach(x=>{const k=x.indexOf(": ");if(k>0)fields.push({id:uid(),label:x.slice(0,k),type:"text",value:x.slice(k+2)})});return}fields.push({id:uid(),label:rows[0][i].trim(),type:/totp|pin|otp/i.test(h)?"pw":"text",...(/\bpin\b/i.test(h)?{pwl:"PIN"}:{}),value:v})});
 let name=g("name");if(!name){const u=g("url");name=u?u.replace(/^\w+:\/\/(www\.)?/,"").split(/[\/?#]/)[0]:g("account")||"Senza nome"}
 out.push({id:uid(),name,group:g("group")||"Importati",icon:"🔑",account:g("account"),password:g("password"),comment:g("comment"),fields,updated:Date.now()})}return out}
 const GIC=g=>{g=g.toLowerCase();return /carta|carte|card|bancomat/.test(g)?"💳":/banc|bank/.test(g)?"🏦":/spid|cie|ident/.test(g)?"🛡️":/mail|pec/.test(g)?"📧":/social/.test(g)?"📱":/lavoro|work/.test(g)?"💼":/account/.test(g)?"👤":"🔑"};
 async function importCSV(text){const rows=parseCSV(text);const E=rows.length>1&&csvEntries(rows);if(!E)return say("Non riconosco questo file. Si possono importare i backup di X-Pass (.vault) e i file CSV esportati da altri gestori di password. I database cifrati di altre app (.db, .kdbx…) non si possono leggere: esporta prima in CSV.");
 const key=e=>[e.name,e.account,e.password].join("\u0001").toLowerCase(),have=new Set(V.entries.map(key)),nu=E.filter(e=>!have.has(key(e)));
-if(!nu.length)return say("Tutti i "+E.length+" record di questo file sono già presenti.");
-if(!await ask("Trovati "+E.length+" record, di cui "+nu.length+" nuovi"+(E.length-nu.length?" ("+(E.length-nu.length)+" già presenti verranno saltati)":"")+". Importarli?"))return;
+if(!nu.length)return say(E.length==1?"La voce di questo file è già presente.":"Tutte le "+E.length+" voci di questo file sono già presenti.");
+if(!await ask("Trovate "+E.length+" voci, di cui "+nu.length+" nuove"+(E.length-nu.length?" ("+(E.length-nu.length)+" già presenti verranno saltate)":"")+". Importarle?"))return;
 for(const e of nu){const ex=Object.keys(V.groups).find(x=>x.toLowerCase()==e.group.toLowerCase());if(ex)e.group=ex;else V.groups[e.group]={icon:GIC(e.group)};V.entries.push(e)}
-await persist();view={v:"home"};render();say("Importati "+nu.length+" record. Ricorda di eliminare il file CSV: contiene le password in chiaro.")}
+await persist();view={v:"home"};render();say("Importate "+nu.length+" voci. Ricorda di eliminare il file CSV: contiene le password in chiaro.")}
 
 /* Appunti sicuri: nell'app Android il testo è segnato come sensibile e cancellato dopo CLIPS secondi (anche se l'app è chiusa) */
 /* App web (iPhone): Safari permette di scrivere negli appunti solo durante un tocco. Dopo CLIPS secondi si prova a
@@ -321,11 +378,11 @@ function toast(m){let t=$("#toast");if(!t){t=document.createElement("div");t.id=
 
 /* Modifica gruppo (nome e icona). Se il nuovo nome esiste già, propone di unire i due gruppi */
 function editGroup(){const old=view.g;let icon=V.groups[old].icon;const o=document.createElement("div");o.className="ov";
-o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0;max-height:88vh;overflow-y:auto"><b>Modifica gruppo</b><label style="margin-top:14px">Nome</label><input id="gn" value="${esc(old)}" autocomplete="off"><label style="margin-top:14px">Icona <span class="note">(tocca per cambiarla)</span></label><button id="gi" style="font-size:26px">${ic(icon)}</button><div id="gpk"></div><div class="err" id="ger"></div><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">✔ Salva</button></div></div>`;
+o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0;max-height:88vh;overflow-y:auto">${hd("✏️ Modifica gruppo")}<label>Nome del gruppo</label><input id="gn" value="${esc(old)}" autocomplete="off"><label style="margin-top:14px">Icona <span class="note">(tocca per cambiarla)</span></label><button id="gi" style="font-size:26px">${ic(icon)}</button><div id="gpk"></div><div class="err" id="ger"></div><div class="row2"><button data-v="0">Annulla</button><button class="p" data-v="1">✔ Salva</button></div></div>`;
 document.body.appendChild(o);const pk=o.querySelector("#gpk");
-o.onclick=async e=>{if(e.target.closest("#gi")){if(pk.innerHTML)pk.innerHTML="";else picker(pk,i=>{icon=i;o.querySelector("#gi").innerHTML=ic(i)});return}
+o.onclick=async e=>{if(e.target.closest("#gi")){if(pk.innerHTML)pk.innerHTML="";else picker(pk,(i,gone)=>{if(i)icon=i;else if(icon==gone)icon="🔑";o.querySelector("#gi").innerHTML=ic(icon)});return}
 const b=e.target.closest("[data-v]");if(!b)return;if(b.dataset.v=="0")return o.remove();const n=o.querySelector("#gn").value.trim();if(!n)return o.querySelector("#ger").textContent="Il nome del gruppo non può essere vuoto";o.remove();await saveGroup(old,n,icon)}}
-async function saveGroup(old,n,icon){const ex=n===old?null:Object.keys(V.groups).find(x=>x!==old&&x.toLowerCase()==n.toLowerCase());if(ex&&!await ask("Esiste già il gruppo «"+ex+"». Spostare lì tutti i record di «"+old+"» e unire i due gruppi?"))return;
+async function saveGroup(old,n,icon){const ex=n===old?null:Object.keys(V.groups).find(x=>x!==old&&x.toLowerCase()==n.toLowerCase());if(ex&&!await ask("Esiste già il gruppo «"+ex+"». Spostare lì tutte le voci di «"+old+"» e unire i due gruppi?"))return;
 const to=ex||n,now=Date.now();if(to!==old){if(!ex)V.groups[to]=V.groups[old];delete V.groups[old];V.entries.forEach(e=>{if(e.group==old){e.group=to;e.updated=now}})}if(!ex)V.groups[to].icon=icon;await persist();view={v:"group",g:to};render()}
 
 /* Lettura del file da importare: riconosce il backup .vault anche con caratteri invisibili in testa, codifica UTF-16 o JSON racchiuso fra virgolette */
@@ -340,12 +397,18 @@ if(isV)return{err:"Questo backup .vault non è leggibile ("+u.length+" byte, ini
 return{text:t}}
 
 /* Eventi */
-function showGs(all){const el=$("#gs");if(!el||!cur||(!cur._new&&!cur._ed))return;const q=(cur.group||"").trim().toLowerCase();const l=Object.keys(V.groups).filter(g=>all||!q||g.toLowerCase().includes(q));el.innerHTML=l.map(g=>`<button data-a="gpick" data-g="${esc(g)}">${ic(V.groups[g].icon)} ${esc(g)}</button>`).join("");el.hidden=!l.length}
-function picker(el,cb){const all=[...ICONS,...Object.keys(V.icons).map(i=>"img:"+i)];el.innerHTML=`<div class="pick pk">${all.map(i=>`<button data-ic="${i}">${ic(i)}</button>`).join("")}<button data-up="1" title="Carica la tua immagine">📷＋</button></div>`;el.onclick=ev=>{const b=ev.target.closest("button");if(!b)return;if(b.dataset.up)return addIcon(i=>{cb(i);el.innerHTML=""});if(b.dataset.ic){cb(b.dataset.ic);el.innerHTML=""}}}
+function showGs(all){const el=$("#gs");if(!el||!cur||(!cur._new&&!cur._ed))return;const q=(cur.group||"").trim().toLowerCase();const l=Object.keys(V.groups).filter(g=>all||!q||g.toLowerCase().includes(q)).sort(az);el.innerHTML=l.map(g=>`<button data-a="gpick" data-g="${esc(g)}">${ic(V.groups[g].icon)} ${esc(g)}</button>`).join("");el.hidden=!l.length}
+/* Scelta icona: emoji + immagini personali. Da qui si caricano nuove immagini e si eliminano quelle non più volute */
+function picker(el,cb){let rm=false;const draw=()=>{const own=Object.keys(V.icons);if(!own.length)rm=false;el.innerHTML=`${rm?'<p class="note" style="margin:8px 0 0">Tocca una tua immagine per eliminarla.</p>':""}<div class="pick pk">${rm?"":ICONS.map(i=>`<button data-ic="${i}">${i}</button>`).join("")}${own.map(i=>`<button data-ic="img:${i}"${rm?' style="outline:2px solid var(--bad)"':""}>${ic("img:"+i)}</button>`).join("")}</div><div class="row2" style="margin-top:0">${rm?'<button class="p" data-rm="1">✔ Fatto</button>':`<button data-up="1">📷 Usa una tua immagine</button>${own.length?'<button data-rm="1">🗑 Elimina tue immagini</button>':""}`}</div>`};draw();
+el.onclick=async ev=>{const b=ev.target.closest("button");if(!b||!el.contains(b))return;if(b.dataset.up)return addIcon(i=>{cb(i);el.innerHTML=""});if(b.dataset.rm){rm=!rm;return draw()}
+const i=b.dataset.ic;if(!i)return;if(!rm){cb(i);el.innerHTML="";return}
+if(await ask("Eliminare questa immagine? Le voci e i gruppi che la usano mostreranno 🔑.")){delete V.icons[i.slice(4)];await persist();cb(null,i);draw()}}}
+const esig=c=>JSON.stringify([c.name,c.group,c.icon,c.account,c.accl||"",c.password,c.pwl||"",c.comment,c.fields]);
+const dest=bk=>bk&&bk.v=="group"&&V.groups[bk.g]?bk:bk&&(bk.v=="sec"||bk.v=="bk")?{v:bk.v}:{v:"home"};
 const blank=()=>({id:uid(),_new:1,_ng:0,name:"",group:"",icon:"🔑",account:"",password:"",comment:"",fields:[],updated:0});
 app.addEventListener("input",e=>{const t=e.target;if(t.id=="q"){Q=t.value;$("#hl").innerHTML=homeList();return}if(t.dataset.c){th()[t.dataset.c]=t.value;applyTheme();return}if(view.v!="entry")return;if(t.tagName=="TEXTAREA")fitTA(t);const c=t.closest(".pw");if(t.dataset.k)cur[t.dataset.k]=t.value;if(t.dataset.k=="group")showGs(false);
 const card=t.closest("[data-fid]");if(card){const f=cur.fields.find(x=>x.id==card.dataset.fid);if(t.hasAttribute("data-fl"))f.label=t.value;if(t.hasAttribute("data-fv"))f.value=t.value}
-if(c&&t.tagName=="INPUT"&&t.type!="range")c.querySelector(".m").innerHTML=meter(t.value)});
+if(c&&t.tagName=="INPUT"&&t.type!="range")c.querySelector(".m").innerHTML=c.dataset.pin?dupNote(t.value):meter(t.value)});
 app.addEventListener("focusin",e=>{if(e.target.dataset&&e.target.dataset.k=="group")showGs(false)});
 app.addEventListener("change",e=>{const t=e.target;if(t.dataset.c)persist();});
 document.addEventListener("click",async ev=>{if(!ev.target.closest('[data-a="menu"]')){const m=$("#mn");if(m)m.remove()}
@@ -354,70 +417,73 @@ const b=ev.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,pw=b.clos
 const setPw=v=>{const i=pw.querySelector("input[data-k],input[data-fv]");i.value=v;i.type="text";i.dispatchEvent(new Event("input",{bubbles:true}))};
 const done=()=>{const o=$(".ov");if(o)o.remove()};
 switch(a){
-case"menu":{if($("#mn"))break;const items='<div class="mh">Sicurezza</div><button data-a="chk">🩺 Controllo password</button><button data-a="bio">'+FP+' Accesso biometrico'+(stGet("bio1")||stGet("pk1")?" ✔":"")+'</button><button data-a="chpw">🔑 Cambia password principale</button>'
-+'<div class="mh">Backup e dati</div><button data-a="expenc">💾 Fai un backup cifrato<small>Ultimo: '+bkText()+'</small></button><button data-a="bkset">🔔 Promemoria backup<small>'+(bkCfg().on?'Dopo '+bkCfg().days+(bkCfg().days==1?' giorno':' giorni')+' di modifiche non salvate':'Disattivato')+'</small></button><button data-a="imp">📥 Importa backup o CSV</button><button data-a="expcsv">📄 Esporta elenco CSV<small>Non cifrato: password leggibili</small></button>'
-+'<div class="mh">Aspetto</div><button data-a="theme">🎨 Personalizza</button><div class="note" style="padding:10px 16px;border-top:1px solid var(--bd);margin-top:6px">X-Pass '+VER+(NATIVE?'':IOS?' · iPhone':' · web')+(BUILD?' · build '+BUILD:'')+'</div>';const d=document.createElement("div");d.className="menu";d.id="mn";d.innerHTML=items;$(".bar").appendChild(d);break}
+case"menu":{if($("#mn")){$("#mn").remove();break}const items='<button data-a="theme">🎨 Personalizza<small>Temi, colori e sfondi</small></button><button data-a="bkp">💾 Backup e dati<small>Ultimo backup: '+bkText()+'</small></button><button data-a="sec">🛡️ Sicurezza<small>Controllo password, accesso biometrico, password principale</small></button><div class="note" style="padding:10px 16px;border-top:1px solid var(--bd);margin-top:6px">X-Pass · Versione '+VER+(IOS?' per iPhone':'')+' by Giordano'+(BUILD?'<br><span style="opacity:.7;font-size:12px">build '+BUILD+'</span>':'')+'</div>';const d=document.createElement("div");d.className="menu";d.id="mn";d.innerHTML=items;$(".bar").appendChild(d);break}
+case"sec":view={v:"sec"};render();break;
+case"bkp":view={v:"bk"};render();break;
 case"lock":lock();break;
 case"home":view={v:"home"};render();break;
 case"theme":view={v:"theme"};render();break;
 case"grp":view={v:"group",g:b.dataset.n};render();break;
 case"gedit":editGroup();break;
 case"chk":pwCheck();break;
-case"new":cur=blank();view.v="entry";render();break;
-case"edit":cur._ed=1;render();break;
-case"open":{const fs=view.v=="home";done();cur=JSON.parse(JSON.stringify(V.entries.find(x=>x.id==b.dataset.id)));cur._ng=0;cur._ed=0;cur._fs=fs;view={v:"entry",g:view.g};render();break}
-case"back":if(view.v=="theme")view={v:"home"};else if(view.v=="entry")view=cur.group&&V.groups[cur.group]&&!cur._new&&!cur._fs?{v:"group",g:cur.group}:{v:"home"};else{view={v:"home"};Q=""}cur=null;render();break;
+case"new":cur=blank();if(view.v=="group")cur.group=view.g;cur._bk=Object.assign({},view);cur._o=esig(cur);view={v:"entry"};render();break;
+case"edit":cur._ed=1;cur._o=esig(cur);render();break;
+case"open":{done();cur=JSON.parse(JSON.stringify(V.entries.find(x=>x.id==b.dataset.id)));cur._bk=Object.assign({},view);view={v:"entry"};render();break}
+case"back":if(view.v=="entry"){const ch=(cur._new||cur._ed)&&esig(cur)!==cur._o;if(ch&&!await dlg("Hai fatto delle modifiche non salvate. Vuoi uscire senza salvarle?",'<button data-v="0">Resta qui</button><button class="d" data-v="1">Esci senza salvare</button>'))break;
+/* da "Modifica" la freccia torna alla scheda del record; altrimenti alla pagina da cui si era arrivati */
+if(cur._ed&&!cur._new){const bk=cur._bk;cur=JSON.parse(JSON.stringify(V.entries.find(x=>x.id==cur.id)));cur._bk=bk;render();break}view=dest(cur._bk);cur=null}else{if(view.v=="group")Q="";view={v:"home"}}render();break;
+case"pwl":{const fc=b.closest("[data-fid]"),o=fc?cur.fields.find(f=>f.id==fc.dataset.fid):cur;if(b.dataset.l=="PIN")o.pwl="PIN";else delete o.pwl;render();break}
 case"gdd":{const g=$("#gs");if(g&&!g.hidden)g.hidden=true;else showGs(true);break}
 case"gpick":cur.group=b.dataset.g;$('[data-k="group"]').value=cur.group;$("#gs").hidden=true;break;
-case"eicon":picker($("#ip"),i=>{cur.icon=i;$("#ei").innerHTML=ic(i)});break;
+case"eicon":{const ip=$("#ip");if(ip.innerHTML){ip.innerHTML="";break}picker(ip,(i,gone)=>{if(i)cur.icon=i;else if(cur.icon==gone)cur.icon="🔑";$("#ei").innerHTML=ic(cur.icon)});break}
 case"eye":{const i=(pw||b.parentNode).querySelector("input");i.type=i.type=="password"?"text":"password";break}
-case"copy":{const i=(pw||b.parentNode).querySelector("input"),o=b.textContent;if(await copySafe(i.value)){b.textContent="✔";setTimeout(()=>b.textContent=o,1200);toast(NATIVE||!IOS?"Copiato · si cancella fra "+CLIPS+" s":"Copiato · dopo "+CLIPS+" s si cancella al primo tocco su X-Pass")}else{i.type="text";i.select()}break}
+case"copy":{const i=(pw||b.parentNode).querySelector("input"),o=b.textContent;if(await copySafe(i.value)){b.textContent="✔";setTimeout(()=>b.textContent=o,1200);toast(IOS?"Copiato · dopo "+CLIPS+" s si cancella al primo tocco su X-Pass":"Copiato · si cancella fra "+CLIPS+" s")}else{i.type="text";i.select()}break}
 case"gtog":pw.querySelector(".gen").classList.toggle("o");break;
 case"gen":setPw(gen(pw.querySelector(".gt").value,+pw.querySelector(".gl").value));break;
 case"addt":case"addp":cur.fields.push({id:uid(),label:"",type:a=="addp"?"pw":"text",value:""});render();break;
 case"rm":cur.fields=cur.fields.filter(f=>f.id!=b.closest("[data-fid]").dataset.fid);render();break;
-case"save":{const n=(cur.name||"").trim();let g=(cur.group||"").trim();const ex=Object.keys(V.groups).find(x=>x.toLowerCase()==g.toLowerCase());if(ex)g=ex;if(!n)return say("Inserisci un nome");if(!g)return say("Scegli un gruppo o creane uno nuovo");cur.group=g;if(!V.groups[g])V.groups[g]={icon:cur.icon};cur.updated=Date.now();delete cur._new;delete cur._ng;delete cur._ed;delete cur._fs;const i=V.entries.findIndex(x=>x.id==cur.id);if(i<0)V.entries.push(cur);else V.entries[i]=cur;cleanup();await persist();view={v:"group",g};cur=null;render();break}
-case"del":if(await ask("Eliminare questo record?")){V.entries=V.entries.filter(x=>x.id!=cur.id);V.del[cur.id]=Date.now();cleanup();await persist();view={v:"home"};cur=null;render()}break;
+case"save":{const n=(cur.name||"").trim();let g=(cur.group||"").trim();const ex=Object.keys(V.groups).find(x=>x.toLowerCase()==g.toLowerCase());if(ex)g=ex;if(!n)return say("Inserisci un nome");if(!g)return say("Scegli un gruppo o creane uno nuovo");cur.group=g;if(!V.groups[g])V.groups[g]={icon:cur.icon};const al=(cur.accl||"").trim();if(!al||al.toLowerCase()=="account")delete cur.accl;else cur.accl=al;cur.fields=cur.fields.filter(f=>(f.label||"").trim()||(f.value||"").trim());
+cur.updated=Date.now();const bk=cur._bk&&cur._bk.v=="group"?{v:"group",g}:cur._bk;["_new","_ng","_ed","_fs","_bk","_o"].forEach(k=>delete cur[k]);const i=V.entries.findIndex(x=>x.id==cur.id);if(i<0)V.entries.push(cur);else V.entries[i]=cur;cleanup();await persist();cur=JSON.parse(JSON.stringify(cur));cur._bk=bk;render();toast("Voce salvata");break}
+case"del":if(await ask("Eliminare questa voce?")){V.entries=V.entries.filter(x=>x.id!=cur.id);V.del[cur.id]=Date.now();cleanup();await persist();view=dest(cur._bk);cur=null;render()}break;
 case"expcsv":if(await ask("Il file CSV contiene tutte le password in chiaro. Conservalo con cura. Continuare?")){done();await saveFile("x-pass-elenco.csv",csv(),"text/csv")}break;
 case"expenc":done();await doBackup();break;
 case"bkset":done();bkSet();break;
+case"bkdir":if(await mkBkDir()){say(DIRMSG);render()}break;
 case"bklater":V.bkSnooze=Date.now();await persist();render();break;
-case"bio":bioMenu();break;
-case"imp":{const i=document.createElement("input");i.type="file";i.oncancel=back;i.onchange=async()=>{back();try{const f=i.files[0];if(!f)return;const r=await readImport(f);if(r.err)return say(r.err);if(!r.vault){const tx=r.text;if(/^\s*SQLite format|\u0000/.test(tx.slice(0,200)))return say("Questo file è un database cifrato di un'altra app e non si può leggere. Dall'altra app esporta i dati in formato CSV e importa quello.");return await importCSV(tx)}const d=r.vault;let R;try{R=await open(d,await derive(MP,unb(d.s)))}catch(e){const p=await askPw("Questo backup è stato creato con un'altra password principale. Inseriscila:");if(p==null)return;R=await open(d,await derive(p,unb(d.s)))}const nr=merge(R);if(R.lk&&R.lk.imgs){const n=LK.imgs.length;for(const x of R.lk.imgs)if(!LK.imgs.some(y=>y.id==x.id))LK.imgs.push(x);if(!await saveLK())LK.imgs.length=n}cleanup();await persist();applyTheme();render();say(nr?"Backup importato: "+nr+" record ripristinati.":"Backup importato: tutti i record del backup erano già presenti.")}catch(e){say("File non valido o password errata")}};away();i.click();break}
+case"bio":await bioMenu();if(view.v=="sec")render();break;
+case"imp":{const i=document.createElement("input");i.type="file";i.oncancel=back;i.onchange=async()=>{back();try{const f=i.files[0];if(!f)return;const r=await readImport(f);if(r.err)return say(r.err);if(!r.vault){const tx=r.text;if(/^\s*SQLite format|\u0000/.test(tx.slice(0,200)))return say("Questo file è un database cifrato di un'altra app e non si può leggere. Dall'altra app esporta i dati in formato CSV e importa quello.");return await importCSV(tx)}const d=r.vault;let R;try{R=await open(d,await derive(MP,unb(d.s)))}catch(e){const p=await askPw("Questo backup è stato creato con un'altra password principale. Inseriscila:");if(p==null)return;R=await open(d,await derive(p,unb(d.s)))}const nr=merge(R);if(R.lk&&R.lk.imgs){const n=LK.imgs.length;for(const x of R.lk.imgs)if(!LK.imgs.some(y=>y.id==x.id))LK.imgs.push(x);if(!await saveLK())LK.imgs.length=n}cleanup();await persist();applyTheme();render();say(nr?"Backup importato: "+(nr==1?"1 voce ripristinata.":nr+" voci ripristinate."):"Backup importato: tutte le voci del backup erano già presenti.")}catch(e){say("File non valido o password errata")}};away();i.click();break}
 case"chpw":chPw();break;
 case"skipi":ev.preventDefault();SKIPI=true;render();break;
 case"pre":{const p=PRE[+b.dataset.i],t=th();t.bg=p[1];t.card=p[2];t.tx=p[3];t.ac=p[4];applyTheme();await persist();render();break}
 case"pickc":colorModal(b.dataset.c,b.dataset.n);break;
 case"libadd":pickImg(async us=>{V.lib.push(...us.map(u=>({id:uid(),u})));await persist();render()},1080,"image/jpeg",.6,true);break;
-case"limg":{const x=V.lib.find(y=>y.id==b.dataset.id),fx=(V.theme||{}).imgId==x.id;modal(`<div class="prev"><img src="${x.u}"></div><div class="row2" style="flex-direction:column"><button data-a="limgfix" data-id="${x.id}">${fx?"📌 Togli come sfondo":"📌 Usa come sfondo"}</button><button data-a="limgk" data-id="${x.id}">🚪 Copia nella pagina iniziale</button><button class="d" data-a="limgdel" data-id="${x.id}">🗑 Elimina immagine</button><button data-a="close">Chiudi</button></div>`);break}
-case"limgk":{const x=V.lib.find(y=>y.id==b.dataset.id);done();if(!LK.imgs.some(y=>y.u==x.u)){LK.imgs.push({id:uid(),u:x.u});if(!await saveLK())LK.imgs.pop()}render();break}
+case"limg":{const x=V.lib.find(y=>y.id==b.dataset.id),fx=(V.theme||{}).imgId==x.id;modal(`<div class="prev"><img src="${x.u}"></div><div class="row2" style="flex-direction:column"><button data-a="limgfix" data-id="${x.id}">${fx?"Togli come sfondo":"📌 Usa come sfondo"}</button><button data-a="limgk" data-id="${x.id}">🔐 Usa anche nella schermata di sblocco</button><button class="d" data-a="limgdel" data-id="${x.id}">🗑 Elimina immagine</button></div>`,"Sfondo delle altre pagine");break}
+case"limgk":{const x=V.lib.find(y=>y.id==b.dataset.id);done();if(LK.imgs.some(y=>y.u==x.u))toast("È già fra gli sfondi della schermata di sblocco");else{LK.imgs.push({id:uid(),u:x.u});if(await saveLK())toast("Aggiunta agli sfondi della schermata di sblocco");else LK.imgs.pop()}render();break}
 case"kadd":pickImg(async us=>{const n=LK.imgs.length;LK.imgs.push(...us.map(u=>({id:uid(),u})));if(!await saveLK()){LK.imgs.length=n}render()},1080,"image/jpeg",.6,true);break;
-case"kimg":{const x=LK.imgs.find(y=>y.id==b.dataset.id);modal(`<div class="prev"><img src="${x.u}"></div><div class="row2" style="flex-direction:column"><button data-a="kfix" data-id="${x.id}">📌 Usa come sfondo fisso</button><button class="d" data-a="kdel" data-id="${x.id}">🗑 Elimina immagine</button><button data-a="close">Chiudi</button></div>`);break}
-case"kmode":LK.mode=b.dataset.m;saveLK();render();break;
-case"kfix":LK.fix=b.dataset.id;LK.mode="fix";saveLK();done();render();break;
-case"kdel":if(await ask("Eliminare definitivamente questa immagine?")){LK.imgs=LK.imgs.filter(x=>x.id!=b.dataset.id);if(LK.fix==b.dataset.id)LK.fix=null;if(!LK.imgs.length)LK.mode="fix";saveLK();done();render()}break;
+case"kimg":{const x=LK.imgs.find(y=>y.id==b.dataset.id);{const on=LK.mode=="fix"&&((LK.imgs.find(y=>y.id==LK.fix)||LK.imgs[0]).id==x.id);modal(`<div class="prev"><img src="${x.u}"></div><div class="row2" style="flex-direction:column">${on?'<p class="note" style="text-align:center;margin:0 0 4px">📌 È l\'immagine in uso</p>':`<button data-a="kfix" data-id="${x.id}">📌 Usa sempre questa (Fissa)</button>`}<button class="d" data-a="kdel" data-id="${x.id}">🗑 Elimina immagine</button></div>`,"Sfondo della schermata di sblocco")}break}
+case"kmode":LK.mode=b.dataset.m;await saveLK();render();break;
+case"kfix":LK.fix=b.dataset.id;LK.mode="fix";await saveLK();done();render();break;
+case"kdel":if(await ask("Eliminare definitivamente questa immagine?")){LK.imgs=LK.imgs.filter(x=>x.id!=b.dataset.id);if(LK.fix==b.dataset.id)LK.fix=null;if(!LK.imgs.length)LK.mode="fix";await saveLK();done();render()}break;
 case"limgfix":{const t=th();t.imgId=t.imgId==b.dataset.id?null:b.dataset.id;done();applyTheme();await persist();render();break}
 case"limgdel":if(await ask("Eliminare definitivamente questa immagine?")){const id=b.dataset.id,t=V.theme;V.lib=V.lib.filter(x=>x.id!=id);if(t){if(t.imgId==id)t.imgId=null}done();applyTheme();await persist();render()}break;
-case"icadd":addIcon(()=>render());break;
-case"icrm":if(await ask("Eliminare questa icona? I record che la usano torneranno a 🔑.")){delete V.icons[b.dataset.id];await persist();render()}break;
 case"treset":V.theme=null;applyTheme();await persist();render();break}});
-/* Spazio "persistente": chiede al telefono di non cancellare mai i dati di X-Pass per fare spazio */
-function keep(){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}}
+/* Spazio "persistente": chiede al telefono di non cancellare i dati di X-Pass per fare spazio */
+function keep(){if(NATIVE)return;try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}}
 
 /* Funzionamento senza internet e aggiornamenti automatici (service worker, solo nell'app web).
    A ogni apertura e ogni volta che si torna su X-Pass si controlla se su GitHub c'è una versione nuova.
-   Se c'è, viene scaricata per intero e poi l'app si ricarica: subito se si è nella pagina iniziale senza aver
+   Se c'è, viene scaricata per intero e poi l'app si ricarica: subito se si è nella schermata di sblocco senza aver
    scritto nulla, altrimenti al blocco successivo. I dati non vengono toccati. */
 let UPD=false,SWR=null,swLast=0;
 function swCheck(){if(SWR&&navigator.onLine!==false&&Date.now()-swLast>30000){swLast=Date.now();SWR.update().catch(()=>{})}}
 function swReady(){if(UPD&&!KEY){const m=$("#mp");if(!m||!m.value)location.reload()}}
-if(!NATIVE&&"serviceWorker" in navigator&&isSecureContext){const had=!!navigator.serviceWorker.controller;
+if(!NATIVE&&"serviceWorker" in navigator&&isSecureContext&&location.protocol.startsWith("http")){const had=!!navigator.serviceWorker.controller;
 navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!had||UPD)return;UPD=true;swReady()});
 navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{SWR=r;swCheck()}).catch(()=>{});
 addEventListener("online",swCheck);setInterval(swReady,3000)}
 
 /* Avviso dopo un aggiornamento */
-function verNote(){const v=VER+(BUILD?"."+BUILD:""),o=stGet("xver");if(o!==v){stSet("xver",v).catch(()=>{});if(o)toast("X-Pass aggiornato: versione "+VER+(BUILD?" · build "+BUILD:""))}}
+function verNote(){if(NATIVE)return;const v=VER+(BUILD?"."+BUILD:""),o=stGet("xver");if(o!==v){stSet("xver",v).catch(()=>{});if(o)toast("X-Pass aggiornato: versione "+VER+(BUILD?" · build "+BUILD:""))}}
 
 stInit().then(()=>{loadLK();render();verNote()});
 </script></body></html>
